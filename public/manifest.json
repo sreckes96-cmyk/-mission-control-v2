@@ -1,0 +1,43 @@
+{
+  "name": "Mission Control v2.0",
+  "short_name": "Mission Control",
+  "description": "Youth program management for remote First Nations communities",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1828",
+  "theme_color": "#ffa726",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Daily Calendar",
+      "url": "/#calendar",
+      "description": "View and manage daily schedule"
+    },
+    {
+      "name": "Student Database",
+      "url": "/#students",
+      "description": "View student information"
+    },
+    {
+      "name": "Quick Planner",
+      "url": "/#planner",
+      "description": "Get activity recommendations"
+    }
+  ]
+}

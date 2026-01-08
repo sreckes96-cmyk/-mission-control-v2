@@ -39,6 +39,7 @@ import { addCardStyles } from './components/shared/Card.js';
 import { addModalStyles } from './components/shared/Modal.js';
 import { addValidationStyles } from './utils/validation.js';
 import { errorHandler } from './utils/errorHandler.js';
+import { initializeAccessibility } from './utils/accessibility.js';
 
 // Component instances
 let calendarComponent = null;
@@ -94,6 +95,9 @@ async function initializeApp() {
 
     // Mark app as ready
     store.set('appReady', true);
+
+    // Initialize accessibility features
+    initializeAccessibility();
 
     logger.success('Application initialized successfully');
     logger.info(`Running version ${APP_CONFIG.version}`);
