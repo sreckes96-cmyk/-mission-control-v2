@@ -35,6 +35,7 @@ import { ActivitiesLibrary, addActivitiesLibraryStyles } from './components/acti
 import { MusicCoordination, addMusicCoordinationStyles } from './components/music/MusicCoordination.js';
 import { addButtonStyles } from './components/shared/Button.js';
 import { addCardStyles } from './components/shared/Card.js';
+import { addModalStyles } from './components/shared/Modal.js';
 
 // Component instances
 let calendarComponent = null;
@@ -205,6 +206,7 @@ function initializeRouter() {
   // Inject component styles
   addButtonStyles();
   addCardStyles();
+  addModalStyles();
   addInteractiveCalendarStyles();
   addStudentListStyles();
   addAntwaunDashboardStyles();
