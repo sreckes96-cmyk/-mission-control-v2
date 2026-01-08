@@ -206,6 +206,41 @@
             font-weight: 300;
         }
 
+        /* Form Inputs */
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--amber-warm);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .input-field::placeholder {
+            color: var(--gray-soft);
+        }
+
+        select.input-field {
+            background: var(--navy-light);
+            color: var(--cream);
+            cursor: pointer;
+        }
+
+        select.input-field option {
+            background: var(--navy-light);
+            color: var(--cream);
+            padding: 0.5rem;
+        }
+
         /* Loading State */
         .loading {
             text-align: center;

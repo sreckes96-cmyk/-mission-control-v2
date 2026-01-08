@@ -23,6 +23,16 @@ import { musicBookingRepository } from './data/MusicBookingRepository.js';
 // Import activity libraries
 import { FITNESS_ACTIVITIES, COOKING_ACTIVITIES, GAMES_LIBRARY } from './data/activities.js';
 
+// Import components
+import { CalendarView, addCalendarStyles } from './components/calendar/CalendarView.js';
+import { StudentList, addStudentListStyles } from './components/students/StudentList.js';
+import { addButtonStyles } from './components/shared/Button.js';
+import { addCardStyles } from './components/shared/Card.js';
+
+// Component instances
+let calendarComponent = null;
+let studentListComponent = null;
+
 /**
  * Application Configuration
  */
@@ -170,45 +180,91 @@ function loadActivityLibraries() {
  * Initialize router with routes
  */
 function initializeRouter() {
+  // Inject component styles
+  addButtonStyles();
+  addCardStyles();
+  addCalendarStyles();
+  addStudentListStyles();
+
   // Register routes
   router
     .register('calendar', {
       onEnter: async () => {
         logger.info('Navigating to Calendar');
-        // Calendar component will be loaded here
+        const container = document.querySelector('#calendar-section .card');
+        if (container) {
+          if (!calendarComponent) {
+            calendarComponent = new CalendarView(container, { store });
+          }
+          calendarComponent.render();
+        }
       },
       onLeave: async () => {
-        // Cleanup if needed
+        // Component cleanup handled automatically
       },
     })
     .register('students', {
       onEnter: async () => {
         logger.info('Navigating to Students');
-        // Students component will be loaded here
+        const container = document.querySelector('#students-section .card');
+        if (container) {
+          if (!studentListComponent) {
+            studentListComponent = new StudentList(container, { store });
+          }
+          studentListComponent.render();
+        }
       },
     })
     .register('antwaun', {
       onEnter: async () => {
         logger.info('Navigating to Antwaun Dashboard');
-        // Antwaun component will be loaded here
+        const container = document.querySelector('#antwaun-section .card');
+        if (container) {
+          container.innerHTML = `
+            <h2 class="section-title">⭐ Antwaun's Dashboard</h2>
+            <p class="section-subtitle">1-on-1 session tracking with achievements</p>
+            <div class="loading">Component coming soon...</div>
+          `;
+        }
       },
     })
     .register('planner', {
       onEnter: async () => {
         logger.info('Navigating to Quick Planner');
-        // Planner component will be loaded here
+        const container = document.querySelector('#planner-section .card');
+        if (container) {
+          container.innerHTML = `
+            <h2 class="section-title">🎯 Quick Planner</h2>
+            <p class="section-subtitle">Intelligent activity recommendations</p>
+            <div class="loading">Component coming soon...</div>
+          `;
+        }
       },
     })
     .register('activities', {
       onEnter: async () => {
         logger.info('Navigating to Activities Library');
-        // Activities component will be loaded here
+        const container = document.querySelector('#activities-section .card');
+        if (container) {
+          container.innerHTML = `
+            <h2 class="section-title">📚 Activities Library</h2>
+            <p class="section-subtitle">${FITNESS_ACTIVITIES.length} fitness • ${COOKING_ACTIVITIES.length} cooking • ${GAMES_LIBRARY.length} games</p>
+            <div class="loading">Component coming soon...</div>
+          `;
+        }
       },
     })
     .register('music', {
       onEnter: async () => {
         logger.info('Navigating to Music Coordination');
-        // Music component will be loaded here
+        const container = document.querySelector('#music-section .card');
+        if (container) {
+          container.innerHTML = `
+            <h2 class="section-title">🎵 Music Coordination</h2>
+            <p class="section-subtitle">Weekly class booking tracker</p>
+            <div class="loading">Component coming soon...</div>
+          `;
+        }
       },
     });
 
