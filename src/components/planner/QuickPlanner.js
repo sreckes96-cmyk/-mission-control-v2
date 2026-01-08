@@ -167,16 +167,7 @@ export class QuickPlanner extends Component {
   }
 
   attachEvents() {
-    // Student selection
-    const studentSelect = this.$('#student-select');
-    if (studentSelect) {
-      studentSelect.addEventListener('change', () => {
-        const selected = Array.from(studentSelect.selectedOptions).map((opt) =>
-          parseInt(opt.value)
-        );
-        this.setState({ selectedStudents: selected });
-      });
-    }
+    // Note: Student selection handled in populateStudentSelector()
 
     // Energy level radios
     const energyRadios = this.$$('input[name="energy"]');
@@ -410,6 +401,10 @@ export class QuickPlanner extends Component {
   populateStudentSelector() {
     const selectorContainer = this.$('#student-selector-planner');
     const selectedDisplay = this.$('#selected-students-display');
+    const searchInput = this.$('#student-search');
+
+    // Preserve search input value
+    const currentSearchValue = searchInput ? searchInput.value : '';
 
     if (selectorContainer) {
       selectorContainer.innerHTML = this.renderStudentSelector();
@@ -439,6 +434,12 @@ export class QuickPlanner extends Component {
           this.populateStudentSelector();
         });
       });
+    }
+
+    // Restore search input value and focus
+    if (searchInput && currentSearchValue) {
+      searchInput.value = currentSearchValue;
+      searchInput.focus();
     }
   }
 

@@ -652,6 +652,10 @@ export class InteractiveCalendar extends Component {
   populateStudentSelector() {
     const selectorContainer = this.$('#student-selector');
     const selectedDisplay = this.$('#selected-students-display');
+    const searchInput = this.$('#student-search');
+
+    // Preserve search input value
+    const currentSearchValue = searchInput ? searchInput.value : '';
 
     if (selectorContainer) {
       selectorContainer.innerHTML = this.renderStudentSelector();
@@ -681,6 +685,12 @@ export class InteractiveCalendar extends Component {
           this.populateStudentSelector();
         });
       });
+    }
+
+    // Restore search input value and focus
+    if (searchInput && currentSearchValue) {
+      searchInput.value = currentSearchValue;
+      searchInput.focus();
     }
   }
 
