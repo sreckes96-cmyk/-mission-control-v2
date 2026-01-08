@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
+import { resolve } from 'path';
 
 export default defineConfig({
+  root: 'src',
   plugins: [
     viteSingleFile({
       removeViteModuleLoader: true,
@@ -10,14 +12,16 @@ export default defineConfig({
   ],
   build: {
     target: 'es2020',
-    outDir: 'build',
+    outDir: '../build',
+    emptyOutDir: true,
     assetsInlineLimit: 100000000, // Inline all assets
     cssCodeSplit: false,
     rollupOptions: {
+      input: resolve(__dirname, 'src/index.html'),
       output: {
         manualChunks: undefined,
         inlineDynamicImports: true,
-        entryFileNames: 'mission-control-v2.html',
+        entryFileNames: 'assets/[name].js',
         assetFileNames: '[name].[ext]'
       }
     },

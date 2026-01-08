@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Youth work management system for remote First Nations communities">
+    <meta name="theme-color" content="#0a1828">
+    <title>Mission Control v2.0 - Youth Work Management</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Variables */
+        :root {
+            --navy-deep: #0a1828;
+            --navy-mid: #1e3a5f;
+            --navy-light: #2c5f8d;
+            --amber-warm: #ffa726;
+            --amber-bright: #ffb74d;
+            --cream: #fef6e4;
+            --gray-soft: #8892b0;
+            --success: #4ade80;
+            --alert: #fb923c;
+            --purple: #a78bfa;
+            --cyan: #67e8f9;
+
+            /* Semantic colors */
+            --color-academics: #60a5fa;
+            --color-fitness: #f97316;
+            --color-music: #10b981;
+            --color-cooking: #a78bfa;
+            --color-games: #fbbf24;
+            --color-program: #8b5cf6;
+            --color-cancelled: #ef4444;
+
+            /* Typography */
+            --font-display: 'Space Mono', monospace;
+            --font-body: 'Outfit', sans-serif;
+
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 100%);
+            min-height: 100vh;
+            color: var(--cream);
+            padding: 1.5rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Screen reader only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 2rem;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.3rem;
+            background: linear-gradient(135deg, var(--amber-warm), var(--amber-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            color: var(--gray-soft);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--purple);
+            color: var(--navy-deep);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 1rem;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s ease-out 0.1s both;
+            overflow-x: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--gray-soft);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-family: var(--font-body);
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: var(--cream);
+        }
+
+        .nav-tab:focus {
+            outline: 2px solid var(--amber-warm);
+            outline-offset: 2px;
+        }
+
+        .nav-tab.active {
+            color: var(--amber-warm);
+            border-bottom-color: var(--amber-warm);
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--gray-soft);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-soft);
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .nav-tab {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">
+                Mission Control v2.0
+                <span class="version-badge">v2.0</span>
+            </h1>
+            <p class="tagline">Youth Work Management for Remote Communities</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs" role="tablist" aria-label="Main navigation">
+            <button class="nav-tab active"
+                    data-tab="calendar"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="calendar-section">
+                📅 Daily Calendar
+            </button>
+            <button class="nav-tab"
+                    data-tab="students"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="students-section">
+                👥 Student Database
+            </button>
+            <button class="nav-tab"
+                    data-tab="antwaun"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="antwaun-section">
+                ⭐ Antwaun's Dashboard
+            </button>
+            <button class="nav-tab"
+                    data-tab="planner"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="planner-section">
+                🎯 Quick Planner
+            </button>
+            <button class="nav-tab"
+                    data-tab="activities"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="activities-section">
+                📚 Activities Library
+            </button>
+            <button class="nav-tab"
+                    data-tab="music"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="music-section">
+                🎵 Music Coordination
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="app-content">
+            <!-- Calendar Section -->
+            <section id="calendar-section" class="section active" role="tabpanel" aria-labelledby="calendar-tab">
+                <div class="card">
+                    <div class="loading">Loading Calendar</div>
+                </div>
+            </section>
+
+            <!-- Students Section -->
+            <section id="students-section" class="section" role="tabpanel" aria-labelledby="students-tab" aria-hidden="true">
+                <div class="card">
+                    <div class="loading">Loading Student Database</div>
+                </div>
+            </section>
+
+            <!-- Antwaun Section -->
+            <section id="antwaun-section" class="section" role="tabpanel" aria-labelledby="antwaun-tab" aria-hidden="true">
+                <div class="card">
+                    <div class="loading">Loading Antwaun's Dashboard</div>
+                </div>
+            </section>
+
+            <!-- Planner Section -->
+            <section id="planner-section" class="section" role="tabpanel" aria-labelledby="planner-tab" aria-hidden="true">
+                <div class="card">
+                    <div class="loading">Loading Quick Planner</div>
+                </div>
+            </section>
+
+            <!-- Activities Section -->
+            <section id="activities-section" class="section" role="tabpanel" aria-labelledby="activities-tab" aria-hidden="true">
+                <div class="card">
+                    <div class="loading">Loading Activities Library</div>
+                </div>
+            </section>
+
+            <!-- Music Section -->
+            <section id="music-section" class="section" role="tabpanel" aria-labelledby="music-tab" aria-hidden="true">
+                <div class="card">
+                    <div class="loading">Loading Music Coordination</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification Container (injected by logger) -->
+    <div id="notification-container"></div>
+
+    <!-- Main Script -->
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
