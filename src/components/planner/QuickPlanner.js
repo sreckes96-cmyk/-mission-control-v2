@@ -7,6 +7,7 @@ import { Component } from '../../core/Component.js';
 import { studentRepository } from '../../data/StudentRepository.js';
 import { FITNESS_ACTIVITIES, COOKING_ACTIVITIES, GAMES_LIBRARY } from '../../data/activities.js';
 import { logger } from '../../utils/logger.js';
+import { debounce } from '../../utils/helpers.js';
 
 export class QuickPlanner extends Component {
   constructor(container, props = {}) {
@@ -14,6 +15,9 @@ export class QuickPlanner extends Component {
 
     this.state = {
       selectedStudents: [],
+      allStudents: [],
+      filteredStudents: [],
+      studentSearch: '',
       energyLevel: 'medium',
       location: 'indoor',
       activityType: 'all',
@@ -36,12 +40,20 @@ export class QuickPlanner extends Component {
         <div class="planner-form-card">
           <div class="planner-form-grid">
             <div class="form-group">
-              <label class="form-label">Select Students</label>
-              <select id="student-select" class="input-field" multiple size="5">
-                ${students.map((s) => `<option value="${s.id}">${s.name} (Grade ${s.grade})</option>`).join('')}
-              </select>
-              <div class="form-hint">
-                Hold Ctrl/Cmd to select multiple. ${selectedStudents.length} selected
+              <label class="form-label">👥 Select Students</label>
+              <div class="student-search-container">
+                <input
+                  type="text"
+                  class="input-field"
+                  id="student-search"
+                  placeholder="Search students by name..."
+                />
+              </div>
+              <div id="selected-students-display" class="selected-students-planner">
+                <!-- Selected students will appear here as chips -->
+              </div>
+              <div class="student-selector-grid-planner" id="student-selector-planner">
+                <!-- Students will be populated here -->
               </div>
             </div>
 
@@ -311,19 +323,152 @@ export class QuickPlanner extends Component {
   loadStudents() {
     try {
       const students = studentRepository.getAllSorted();
-      this.setState({ students });
+      this.setState({
+        students,
+        allStudents: students,
+        filteredStudents: students,
+      });
       logger.info(`Loaded ${students.length} students for planner`);
     } catch (error) {
       logger.error('Failed to load students', error);
     }
   }
 
+  toggleStudentSelection(studentId) {
+    const { selectedStudents } = this.state;
+    const isSelected = selectedStudents.includes(studentId);
+
+    if (isSelected) {
+      this.setState({
+        selectedStudents: selectedStudents.filter(id => id !== studentId),
+      });
+    } else {
+      this.setState({
+        selectedStudents: [...selectedStudents, studentId],
+      });
+    }
+  }
+
+  filterStudents(searchTerm) {
+    const { allStudents } = this.state;
+    const filtered = searchTerm
+      ? allStudents.filter(s =>
+          s.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : allStudents;
+
+    this.setState({
+      studentSearch: searchTerm,
+      filteredStudents: filtered,
+    });
+  }
+
+  renderStudentSelector() {
+    const { filteredStudents, selectedStudents } = this.state;
+
+    return filteredStudents
+      .map((student) => {
+        const isSelected = selectedStudents.includes(student.id);
+        const initials = student.name.split(' ').map(n => n[0]).join('');
+
+        return `
+          <div
+            class="student-option ${isSelected ? 'selected' : ''}"
+            data-student-id="${student.id}">
+            <div class="student-option-avatar">${initials}</div>
+            <div class="student-option-name">${student.name}</div>
+            <div class="student-option-grade">Grade ${student.grade}</div>
+            ${isSelected ? '<div class="student-option-check">✓</div>' : ''}
+          </div>
+        `;
+      })
+      .join('');
+  }
+
+  renderSelectedStudentsChips() {
+    const { selectedStudents, allStudents } = this.state;
+
+    if (selectedStudents.length === 0) {
+      return '<p class="empty-hint">No students selected - click students below to add</p>';
+    }
+
+    return selectedStudents
+      .map((studentId) => {
+        const student = allStudents.find(s => s.id === studentId);
+        if (!student) return '';
+
+        return `
+          <div class="student-chip-planner">
+            <span class="student-chip-name">${student.name}</span>
+            <button class="student-chip-remove" data-student-id="${studentId}">×</button>
+          </div>
+        `;
+      })
+      .join('');
+  }
+
+  populateStudentSelector() {
+    const selectorContainer = this.$('#student-selector-planner');
+    const selectedDisplay = this.$('#selected-students-display');
+
+    if (selectorContainer) {
+      selectorContainer.innerHTML = this.renderStudentSelector();
+
+      // Add click handlers
+      const studentOptions = this.$$('.student-option');
+      studentOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          const studentId = parseInt(option.dataset.studentId);
+          this.toggleStudentSelection(studentId);
+          // Re-render both selector and chips
+          this.populateStudentSelector();
+        });
+      });
+    }
+
+    if (selectedDisplay) {
+      selectedDisplay.innerHTML = this.renderSelectedStudentsChips();
+
+      // Add remove handlers
+      const removeButtons = this.$$('.student-chip-remove');
+      removeButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const studentId = parseInt(btn.dataset.studentId);
+          this.toggleStudentSelection(studentId);
+          this.populateStudentSelector();
+        });
+      });
+    }
+  }
+
+  setupStudentSearch() {
+    const searchInput = this.$('#student-search');
+    if (searchInput) {
+      const debouncedSearch = debounce((value) => {
+        this.filterStudents(value);
+        this.populateStudentSelector();
+      }, 300);
+
+      searchInput.addEventListener('input', (e) => {
+        debouncedSearch(e.target.value);
+      });
+    }
+  }
+
   onMount() {
     this.loadStudents();
+
+    // Populate student selector after render
+    setTimeout(() => {
+      this.populateStudentSelector();
+      this.setupStudentSearch();
+    }, 100);
 
     // Subscribe to student changes
     this.subscribe('students', () => {
       this.loadStudents();
+      this.populateStudentSelector();
     });
 
     logger.info('Quick planner mounted');
@@ -493,6 +638,145 @@ export function addQuickPlannerStyles() {
       font-weight: 600;
     }
 
+    /* Student Selection Styles */
+    .student-search-container {
+      margin-bottom: 1rem;
+    }
+
+    .selected-students-planner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      min-height: 40px;
+      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+    }
+
+    .empty-hint {
+      font-size: 0.85rem;
+      color: var(--gray-soft);
+      font-style: italic;
+      margin: 0;
+    }
+
+    .student-chip-planner {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: linear-gradient(135deg, var(--amber-warm), var(--color-academics));
+      border-radius: 20px;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .student-chip-name {
+      font-weight: 500;
+    }
+
+    .student-chip-remove {
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+
+    .student-chip-remove:hover {
+      background: rgba(239, 68, 68, 0.8);
+    }
+
+    .student-selector-grid-planner {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+    }
+
+    .student-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .student-option:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 167, 38, 0.5);
+    }
+
+    .student-option.selected {
+      background: rgba(255, 167, 38, 0.15);
+      border-color: var(--amber-warm);
+      box-shadow: 0 0 0 3px rgba(255, 167, 38, 0.2);
+    }
+
+    .student-option-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #60a5fa, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .student-option.selected .student-option-avatar {
+      background: linear-gradient(135deg, var(--amber-warm), var(--color-academics));
+    }
+
+    .student-option-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--cream);
+      text-align: center;
+    }
+
+    .student-option-grade {
+      font-size: 0.75rem;
+      color: var(--gray-soft);
+    }
+
+    .student-option-check {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--amber-warm);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
     @media (max-width: 768px) {
       .planner-form-grid {
         grid-template-columns: 1fr;
@@ -500,6 +784,10 @@ export function addQuickPlannerStyles() {
 
       .recommendations-grid {
         grid-template-columns: 1fr;
+      }
+
+      .student-selector-grid-planner {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
     }
   `;
