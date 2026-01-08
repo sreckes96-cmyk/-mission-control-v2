@@ -27,7 +27,7 @@ import { FITNESS_ACTIVITIES, COOKING_ACTIVITIES, GAMES_LIBRARY } from './data/ac
 import { importStudents, getImportSummary, verifyImport } from './utils/importStudents.js';
 
 // Import components
-import { CalendarView, addCalendarStyles } from './components/calendar/CalendarView.js';
+import { InteractiveCalendar, addInteractiveCalendarStyles } from './components/calendar/InteractiveCalendar.js';
 import { StudentList, addStudentListStyles } from './components/students/StudentList.js';
 import { AntwaunDashboard, addAntwaunDashboardStyles } from './components/antwaun/AntwaunDashboard.js';
 import { QuickPlanner, addQuickPlannerStyles } from './components/planner/QuickPlanner.js';
@@ -205,7 +205,7 @@ function initializeRouter() {
   // Inject component styles
   addButtonStyles();
   addCardStyles();
-  addCalendarStyles();
+  addInteractiveCalendarStyles();
   addStudentListStyles();
   addAntwaunDashboardStyles();
   addQuickPlannerStyles();
@@ -220,7 +220,7 @@ function initializeRouter() {
         const container = document.querySelector('#calendar-section .card');
         if (container) {
           if (!calendarComponent) {
-            calendarComponent = new CalendarView(container, { store });
+            calendarComponent = new InteractiveCalendar(container, { store });
           }
           calendarComponent.render();
         }

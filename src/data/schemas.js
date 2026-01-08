@@ -78,6 +78,33 @@ export const studentSchema = {
     maxLength: 1000,
     default: '',
   },
+  likes: {
+    type: 'array',
+    default: [],
+  },
+  dislikes: {
+    type: 'array',
+    default: [],
+  },
+  favoriteActivities: {
+    type: 'array',
+    default: [],
+  },
+  behaviorNotes: {
+    type: 'string',
+    maxLength: 1000,
+    default: '',
+  },
+  strengths: {
+    type: 'string',
+    maxLength: 500,
+    default: '',
+  },
+  challenges: {
+    type: 'string',
+    maxLength: 500,
+    default: '',
+  },
 };
 
 /**
