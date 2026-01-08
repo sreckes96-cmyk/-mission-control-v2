@@ -26,12 +26,20 @@ import { FITNESS_ACTIVITIES, COOKING_ACTIVITIES, GAMES_LIBRARY } from './data/ac
 // Import components
 import { CalendarView, addCalendarStyles } from './components/calendar/CalendarView.js';
 import { StudentList, addStudentListStyles } from './components/students/StudentList.js';
+import { AntwaunDashboard, addAntwaunDashboardStyles } from './components/antwaun/AntwaunDashboard.js';
+import { QuickPlanner, addQuickPlannerStyles } from './components/planner/QuickPlanner.js';
+import { ActivitiesLibrary, addActivitiesLibraryStyles } from './components/activities/ActivitiesLibrary.js';
+import { MusicCoordination, addMusicCoordinationStyles } from './components/music/MusicCoordination.js';
 import { addButtonStyles } from './components/shared/Button.js';
 import { addCardStyles } from './components/shared/Card.js';
 
 // Component instances
 let calendarComponent = null;
 let studentListComponent = null;
+let antwaunComponent = null;
+let plannerComponent = null;
+let activitiesComponent = null;
+let musicComponent = null;
 
 /**
  * Application Configuration
@@ -185,6 +193,10 @@ function initializeRouter() {
   addCardStyles();
   addCalendarStyles();
   addStudentListStyles();
+  addAntwaunDashboardStyles();
+  addQuickPlannerStyles();
+  addActivitiesLibraryStyles();
+  addMusicCoordinationStyles();
 
   // Register routes
   router
@@ -220,11 +232,10 @@ function initializeRouter() {
         logger.info('Navigating to Antwaun Dashboard');
         const container = document.querySelector('#antwaun-section .card');
         if (container) {
-          container.innerHTML = `
-            <h2 class="section-title">⭐ Antwaun's Dashboard</h2>
-            <p class="section-subtitle">1-on-1 session tracking with achievements</p>
-            <div class="loading">Component coming soon...</div>
-          `;
+          if (!antwaunComponent) {
+            antwaunComponent = new AntwaunDashboard(container, { store });
+          }
+          antwaunComponent.render();
         }
       },
     })
@@ -233,11 +244,10 @@ function initializeRouter() {
         logger.info('Navigating to Quick Planner');
         const container = document.querySelector('#planner-section .card');
         if (container) {
-          container.innerHTML = `
-            <h2 class="section-title">🎯 Quick Planner</h2>
-            <p class="section-subtitle">Intelligent activity recommendations</p>
-            <div class="loading">Component coming soon...</div>
-          `;
+          if (!plannerComponent) {
+            plannerComponent = new QuickPlanner(container, { store });
+          }
+          plannerComponent.render();
         }
       },
     })
@@ -246,11 +256,10 @@ function initializeRouter() {
         logger.info('Navigating to Activities Library');
         const container = document.querySelector('#activities-section .card');
         if (container) {
-          container.innerHTML = `
-            <h2 class="section-title">📚 Activities Library</h2>
-            <p class="section-subtitle">${FITNESS_ACTIVITIES.length} fitness • ${COOKING_ACTIVITIES.length} cooking • ${GAMES_LIBRARY.length} games</p>
-            <div class="loading">Component coming soon...</div>
-          `;
+          if (!activitiesComponent) {
+            activitiesComponent = new ActivitiesLibrary(container, { store });
+          }
+          activitiesComponent.render();
         }
       },
     })
@@ -259,11 +268,10 @@ function initializeRouter() {
         logger.info('Navigating to Music Coordination');
         const container = document.querySelector('#music-section .card');
         if (container) {
-          container.innerHTML = `
-            <h2 class="section-title">🎵 Music Coordination</h2>
-            <p class="section-subtitle">Weekly class booking tracker</p>
-            <div class="loading">Component coming soon...</div>
-          `;
+          if (!musicComponent) {
+            musicComponent = new MusicCoordination(container, { store });
+          }
+          musicComponent.render();
         }
       },
     });

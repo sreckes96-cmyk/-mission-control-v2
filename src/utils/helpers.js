@@ -167,6 +167,19 @@ export function getRelativeTime(date) {
 }
 
 /**
+ * Get current week start date (Monday)
+ * @returns {string} ISO date string (YYYY-MM-DD)
+ */
+export function getCurrentWeek() {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = day === 0 ? -6 : 1 - day; // If Sunday, go back 6 days, else go to Monday
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diff);
+  return monday.toISOString().split('T')[0];
+}
+
+/**
  * Capitalize first letter
  * @param {string} str
  * @returns {string}
