@@ -141,7 +141,18 @@ function loadInitialData() {
 
   try {
     // Load students
-    const students = studentRepository.getAll();
+    let students = studentRepository.getAll();
+
+    // Auto-import seed data on first launch if no students exist
+    if (students.length === 0) {
+      logger.info('No students found - importing seed data...');
+      const importResult = importStudents(false);
+      if (importResult.success) {
+        students = studentRepository.getAll();
+        logger.success(`Auto-imported ${students.length} students on first launch!`);
+      }
+    }
+
     store.set('students', students, { silent: true });
     logger.info(`Loaded ${students.length} students`);
 
