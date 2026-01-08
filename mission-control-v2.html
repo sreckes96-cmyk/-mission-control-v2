@@ -1,0 +1,2980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control v2.0 - Enhanced Youth Work Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy-deep: #0a1828;
+            --navy-mid: #1e3a5f;
+            --navy-light: #2c5f8d;
+            --amber-warm: #ffa726;
+            --amber-bright: #ffb74d;
+            --cream: #fef6e4;
+            --gray-soft: #8892b0;
+            --success: #4ade80;
+            --alert: #fb923c;
+            --purple: #a78bfa;
+            --cyan: #67e8f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 100%);
+            min-height: 100vh;
+            color: var(--cream);
+            padding: 1.5rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            margin-bottom: 2rem;
+            animation: slideDown 0.8s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.3rem;
+            background: linear-gradient(135deg, var(--amber-warm), var(--amber-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tagline {
+            font-size: 0.9rem;
+            color: var(--gray-soft);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--purple);
+            color: var(--navy-deep);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 1rem;
+        }
+
+        /* Navigation tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s ease-out 0.1s both;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--gray-soft);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-family: 'Outfit', sans-serif;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: var(--cream);
+        }
+
+        .nav-tab.active {
+            color: var(--amber-warm);
+            border-bottom-color: var(--amber-warm);
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+        
+        /* Card styling */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 1.5rem;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section-subtitle {
+            color: var(--gray-soft);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            color: var(--cream);
+        }
+        
+        /* Input fields */
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--cream);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--amber-warm);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Fix for dropdown select menus */
+        select.input-field {
+            background: var(--navy-light);
+            color: var(--cream);
+            cursor: pointer;
+        }
+
+        select.input-field option {
+            background: var(--navy-light);
+            color: var(--cream);
+            padding: 0.5rem;
+        }
+
+        select.input-field optgroup {
+            background: var(--navy-mid);
+            color: var(--amber-warm);
+            font-weight: 600;
+        }
+
+        .textarea-field {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .input-field::placeholder {
+            color: var(--gray-soft);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--amber-warm), var(--amber-bright));
+            color: var(--navy-deep);
+            box-shadow: 0 4px 20px rgba(255, 167, 38, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 167, 38, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--cream);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Schedule Grid */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .time-slot {
+            padding: 1rem 0.75rem;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--amber-warm);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Activity slots */
+        .activity-slot {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            min-height: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .activity-slot:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .activity-slot.filled {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-left: 3px solid var(--amber-warm);
+        }
+
+        /* Activity category colors */
+        .activity-slot.category-academics { border-left-color: #60a5fa; }
+        .activity-slot.category-fitness { border-left-color: #f97316; }
+        .activity-slot.category-music { border-left-color: #10b981; }
+        .activity-slot.category-cooking { border-left-color: #a78bfa; }
+        .activity-slot.category-games { border-left-color: #fbbf24; }
+        .activity-slot.category-program { border-left-color: #8b5cf6; }
+        .activity-slot.category-cancelled { border-left-color: #ef4444; opacity: 0.6; }
+
+        .activity-block {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .activity-block-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.35rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .activity-icon {
+            font-size: 1.1rem;
+        }
+
+        .activity-block-desc {
+            font-size: 0.85rem;
+            color: var(--gray-soft);
+            line-height: 1.4;
+        }
+
+        .activity-category-badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-left: 0.5rem;
+        }
+
+        .badge-academics { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+        .badge-fitness { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+        .badge-music { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .badge-cooking { background: rgba(167, 139, 250, 0.2); color: #a78bfa; }
+        .badge-games { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        .badge-program { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+        .badge-cancelled { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+        /* Music booking reminder */
+        .music-reminder {
+            background: rgba(167, 139, 250, 0.15);
+            border: 2px solid var(--purple);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .music-reminder-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--purple);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .music-slots {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .music-slot-day {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.75rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .music-slot-label {
+            font-weight: 600;
+        }
+
+        .music-slot-times {
+            color: var(--gray-soft);
+            font-size: 0.9rem;
+        }
+
+        /* Activity library */
+        .activity-library {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .activity-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .activity-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .activity-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--amber-bright);
+        }
+
+        .activity-card-desc {
+            font-size: 0.9rem;
+            color: var(--gray-soft);
+            margin-bottom: 0.75rem;
+        }
+
+        .activity-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .activity-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: var(--cream);
+        }
+
+        /* Contact cards */
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .contact-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .contact-grade {
+            font-size: 0.9rem;
+            color: var(--gray-soft);
+            margin-top: 0.25rem;
+        }
+
+        .contact-info-grid {
+            display: grid;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .contact-info-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .contact-info-label {
+            color: var(--gray-soft);
+            min-width: 100px;
+        }
+
+        .contact-info-value {
+            color: var(--cream);
+        }
+
+        /* Checkbox */
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-option:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .checkbox-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--amber-warm);
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(251, 146, 60, 0.2);
+            color: var(--alert);
+        }
+
+        .status-booked {
+            background: rgba(74, 222, 128, 0.2);
+            color: var(--success);
+        }
+
+        .delete-btn {
+            background: rgba(251, 146, 60, 0.2);
+            color: var(--alert);
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--alert);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: rgba(251, 146, 60, 0.3);
+        }
+
+        /* Dashboard stats */
+        .stat-card {
+            background: rgba(255, 167, 38, 0.1);
+            border: 1px solid rgba(255, 167, 38, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--amber-warm);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--cream);
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        .stat-trend {
+            font-size: 0.8rem;
+            color: var(--gray-soft);
+            margin-top: 0.25rem;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .chart-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--amber-warm), var(--amber-bright));
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+            height: 150px;
+            margin-top: 1rem;
+        }
+
+        .chart-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-label {
+            font-size: 0.75rem;
+            color: var(--gray-soft);
+            text-align: center;
+        }
+
+        .chart-value {
+            font-size: 0.8rem;
+            color: var(--amber-warm);
+            font-weight: 600;
+        }
+
+        /* Student selection */
+        .student-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .student-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .student-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+        
+        .student-card.selected {
+            background: rgba(255, 167, 38, 0.2);
+            border-color: var(--amber-warm);
+        }
+        
+        .student-card.special-attention {
+            border-left: 4px solid var(--alert);
+        }
+        
+        .student-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .student-grade {
+            font-size: 0.85rem;
+            color: var(--gray-soft);
+            margin-top: 0.25rem;
+        }
+        
+        .special-badge {
+            display: inline-block;
+            background: var(--alert);
+            color: var(--navy-deep);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        .label-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: var(--amber-warm);
+            color: var(--navy-deep);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: 700;
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Radio buttons */
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            position: relative;
+        }
+        
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .radio-label {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .radio-option input[type="radio"]:checked + .radio-label {
+            background: rgba(255, 167, 38, 0.2);
+            border-color: var(--amber-warm);
+        }
+        
+        .radio-label:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .plan-header {
+            background: rgba(255, 167, 38, 0.15);
+            border: 1px solid var(--amber-warm);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .plan-header-content {
+            flex: 1;
+        }
+        
+        .plan-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-date {
+            color: var(--gray-soft);
+            font-size: 1.1rem;
+        }
+
+        /* Tabs within sections */
+        .sub-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sub-tab {
+            padding: 0.75rem 1.25rem;
+            background: transparent;
+            border: none;
+            color: var(--gray-soft);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .sub-tab:hover {
+            color: var(--cream);
+        }
+
+        .sub-tab.active {
+            color: var(--amber-warm);
+            border-bottom-color: var(--amber-warm);
+        }
+
+        .sub-section {
+            display: none;
+        }
+
+        .sub-section.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .activity-library {
+                grid-template-columns: 1fr;
+            }
+
+            .schedule-grid {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .time-slot {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.75rem;
+            }
+
+            .nav-tabs {
+                overflow-x: auto;
+            }
+
+            .nav-tab {
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                MISSION CONTROL 
+                <span class="version-badge">v2.0</span>
+            </div>
+            <div class="tagline">Enhanced youth work management system</div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('daily-calendar')">📅 Daily Calendar</button>
+            <button class="nav-tab" onclick="switchTab('antwaun')">📚 Antwaun's Schedule</button>
+            <button class="nav-tab" onclick="switchTab('music-booking')">🎵 Music Booking</button>
+            <button class="nav-tab" onclick="switchTab('activities')">🎮 Activities Library</button>
+            <button class="nav-tab" onclick="switchTab('students')">👥 Student Database</button>
+            <button class="nav-tab" onclick="switchTab('planner')">📋 Quick Planner</button>
+        </div>
+
+        <!-- DAILY CALENDAR SECTION -->
+        <div id="daily-calendar-section" class="section active">
+            <div class="card">
+                <div class="section-title">📅 Today's Schedule</div>
+                <div class="section-subtitle" id="calendar-date">Loading...</div>
+                
+                <div class="schedule-grid" id="dailySchedule">
+                    <!-- Schedule generated dynamically -->
+                </div>
+
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <button class="btn btn-primary" onclick="printSchedule()">Print Today's Schedule</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANTWAUN'S SCHEDULE SECTION -->
+        <div id="antwaun-section" class="section">
+            <div class="card">
+                <div class="section-title">📚 Antwaun's Dashboard</div>
+                <div class="section-subtitle">Track progress, log sessions, and visualize growth</div>
+
+                <!-- Quick Stats Row -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="stat-card" style="background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.2));">
+                        <div class="stat-value" id="totalLexiaMinutes" style="color: #60a5fa;">0</div>
+                        <div class="stat-label">Total Lexia Minutes</div>
+                        <div class="stat-trend" id="lexiaTrend">This week</div>
+                        <div id="lexiaBadge" style="margin-top: 0.5rem; font-size: 2rem;"></div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.2));">
+                        <div class="stat-value" id="totalMathMinutes" style="color: #f97316;">0</div>
+                        <div class="stat-label">Total Math Minutes</div>
+                        <div class="stat-trend" id="mathTrend">This week</div>
+                        <div id="mathBadge" style="margin-top: 0.5rem; font-size: 2rem;"></div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2));">
+                        <div class="stat-value" id="musicClassesCount" style="color: #10b981;">0</div>
+                        <div class="stat-label">Music Classes</div>
+                        <div class="stat-trend" id="musicTrend">This week</div>
+                        <div id="musicBadge" style="margin-top: 0.5rem; font-size: 2rem;"></div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(167, 139, 250, 0.2));">
+                        <div class="stat-value" id="fitnessCount" style="color: #a78bfa;">0</div>
+                        <div class="stat-label">Fitness Activities</div>
+                        <div class="stat-trend" id="fitnessTrend">This week</div>
+                        <div id="fitnessBadge" style="margin-top: 0.5rem; font-size: 2rem;"></div>
+                    </div>
+                </div>
+
+                <div class="music-reminder">
+                    <div class="music-reminder-title">🎵 Music Booking Quick Reference</div>
+                    <div class="music-slots">
+                        <div class="music-slot-day">
+                            <span class="music-slot-label">Tuesday</span>
+                            <span class="music-slot-times">2:00 / 2:15 / 2:30 PM</span>
+                        </div>
+                        <div class="music-slot-day">
+                            <span class="music-slot-label">Wednesday</span>
+                            <span class="music-slot-times">1:45 / 2:00 PM</span>
+                        </div>
+                        <div class="music-slot-day">
+                            <span class="music-slot-label">Thursday</span>
+                            <span class="music-slot-times">2:00 / 2:15 / 2:30 PM</span>
+                        </div>
+                        <div class="music-slot-day">
+                            <span class="music-slot-label">Friday</span>
+                            <span class="music-slot-times">2:15 / 2:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Charts -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="chart-card">
+                        <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Lexia Progress (Last 7 Days)</h3>
+                        <div id="lexiaChart" style="height: 200px;"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Math Progress (Last 7 Days)</h3>
+                        <div id="mathChart" style="height: 200px;"></div>
+                    </div>
+                </div>
+
+                <!-- Session Logger -->
+                <div class="form-group">
+                    <label class="form-label">📅 Today's Session</label>
+                    <input type="date" id="antwaunDate" class="input-field" onchange="loadAntwaunSession()">
+                </div>
+
+                <div class="sub-tabs" style="margin-top: 1.5rem;">
+                    <button class="sub-tab active" onclick="switchSubTab('log-session')">Log Today's Work</button>
+                    <button class="sub-tab" onclick="switchSubTab('view-history')">View History</button>
+                    <button class="sub-tab" onclick="switchSubTab('folders-progress')">School21 Folders</button>
+                </div>
+
+                <!-- Log Session -->
+                <div id="log-session-section" class="sub-section active">
+                    <div class="input-row" style="margin-top: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">📖 Lexia Minutes</label>
+                            <input type="number" id="lexiaMinutes" class="input-field" placeholder="Minutes (goal: 30+)" min="0">
+                            <select id="lexiaCategory" class="input-field" style="margin-top: 0.5rem;">
+                                <option value="">Select category...</option>
+                                <option value="Reading Comprehension">Reading Comprehension</option>
+                                <option value="Grammar">Grammar</option>
+                                <option value="Word Study">Word Study</option>
+                            </select>
+                            <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--gray-soft);">
+                                Goal: 30+ minutes daily
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📐 Math Minutes</label>
+                            <input type="number" id="mathMinutes" class="input-field" placeholder="Minutes (goal: 30-60)" min="0">
+                            <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--gray-soft);">
+                                Goal: 30-60 minutes daily
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">School21 Folder/Topic</label>
+                        <select id="mathFolder" class="input-field">
+                            <option value="">Select folder...</option>
+                            <option value="Addition">Addition</option>
+                            <option value="Subtraction">Subtraction</option>
+                            <option value="Multiplication">Multiplication</option>
+                            <option value="Division">Division</option>
+                            <option value="Equivalent Fractions">Equivalent Fractions</option>
+                            <option value="Comparing Fractions">Comparing Fractions</option>
+                            <option value="Mixed Numbers">Mixed Numbers</option>
+                            <option value="Adding and Subtracting Algebra">Adding and Subtracting Algebra</option>
+                            <option value="Multiplying Fractions">Multiplying Fractions</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">🎵 Music Class</label>
+                        <input type="text" id="musicTime" class="input-field" placeholder="Time (e.g., 2:00 PM)">
+                        <div class="checkbox-option" style="margin-top: 0.5rem;">
+                            <input type="checkbox" id="musicBooked">
+                            <label for="musicBooked">Attended music class today</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">💪 Fitness Activity</label>
+                        <select id="fitnessActivity" class="input-field">
+                            <option value="">Select activity...</option>
+                            <optgroup label="Cardio">
+                                <option value="Jumping Jacks">Jumping Jacks</option>
+                                <option value="High Knees">High Knees</option>
+                                <option value="Butt Kicks">Butt Kicks</option>
+                                <option value="March in Place">March in Place</option>
+                                <option value="Mountain Climbers">Mountain Climbers</option>
+                                <option value="Imaginary Jump Rope">Imaginary Jump Rope</option>
+                                <option value="Shadow Boxing">Shadow Boxing</option>
+                            </optgroup>
+                            <optgroup label="Strength">
+                                <option value="Bodyweight Squats">Bodyweight Squats</option>
+                                <option value="Forward Lunges">Forward Lunges</option>
+                                <option value="Calf Raises">Calf Raises</option>
+                                <option value="Knee Push-Ups">Knee Push-Ups</option>
+                                <option value="Wall Sit">Wall Sit (Invisible Chair)</option>
+                                <option value="Donkey Kicks">Donkey Kicks</option>
+                            </optgroup>
+                            <optgroup label="Core">
+                                <option value="Plank">Plank</option>
+                                <option value="Side Plank">Side Plank</option>
+                                <option value="Superman">Superman</option>
+                                <option value="Bird Dog">Bird Dog</option>
+                                <option value="Crunches">Crunches</option>
+                                <option value="Bicycle Crunches">Bicycle Crunches</option>
+                                <option value="Leg Raises">Leg Raises</option>
+                                <option value="Russian Twists">Russian Twists</option>
+                                <option value="Flutter Kicks">Flutter Kicks</option>
+                            </optgroup>
+                            <optgroup label="Yoga">
+                                <option value="Downward Dog">Downward Dog</option>
+                                <option value="Cat-Cow Pose">Cat-Cow Pose</option>
+                                <option value="Child's Pose">Child's Pose</option>
+                                <option value="Warrior Pose">Warrior Pose</option>
+                                <option value="Tree Pose">Tree Pose</option>
+                                <option value="Bridge Pose">Bridge Pose</option>
+                                <option value="Cobra Pose">Cobra Pose</option>
+                            </optgroup>
+                            <optgroup label="Stretching">
+                                <option value="Neck Stretches">Neck Stretches</option>
+                                <option value="Arm Circles">Arm Circles</option>
+                                <option value="Shoulder Rolls">Shoulder Rolls</option>
+                                <option value="Torso Twists">Torso Twists</option>
+                                <option value="Butterfly Stretch">Butterfly Stretch</option>
+                                <option value="Quad Stretch">Quad Stretch</option>
+                                <option value="Hamstring Stretch">Hamstring Stretch</option>
+                                <option value="Calf Stretch">Calf Stretch</option>
+                            </optgroup>
+                            <optgroup label="Other">
+                                <option value="Arena walk + skating">Arena walk + light skating</option>
+                                <option value="Modified Burpees">Modified Burpees</option>
+                                <option value="Other">Other (specify in notes)</option>
+                            </optgroup>
+                        </select>
+                        <input type="number" id="fitnessMinutes" class="input-field" placeholder="Minutes" min="0" style="margin-top: 0.5rem;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📝 Session Notes</label>
+                        <textarea id="sessionNotes" class="input-field textarea-field" placeholder="What worked well? Any challenges? Progress observed? Mood/energy level?"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-full" onclick="saveAntwaunSession()">💾 Save Today's Session</button>
+                </div>
+
+                <!-- View History -->
+                <div id="view-history-section" class="sub-section">
+                    <div id="sessionHistory" style="margin-top: 1.5rem;">
+                        <!-- History loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Folders Progress -->
+                <div id="folders-progress-section" class="sub-section">
+                    <div style="margin-top: 1.5rem;">
+                        <p style="color: var(--gray-soft); margin-bottom: 1rem;">Track which School21 folders Antwaun has mastered. Each folder requires 20 questions completed.</p>
+                        <div id="foldersProgress">
+                            <!-- Folders loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MUSIC BOOKING SECTION -->
+        <div id="music-booking-section" class="section">
+            <div class="card">
+                <div class="section-title">🎵 Music Class Booking Tracker</div>
+                <div class="section-subtitle">Track and manage weekly music bookings</div>
+
+                <div class="form-group">
+                    <label class="form-label">Select Week</label>
+                    <input type="week" id="musicWeek" class="input-field" onchange="loadMusicBookings()">
+                </div>
+
+                <div id="musicBookingList">
+                    <!-- Bookings loaded dynamically -->
+                </div>
+
+                <button class="btn btn-secondary btn-full" onclick="addMusicBooking()">+ Add New Booking</button>
+            </div>
+        </div>
+
+        <!-- ACTIVITIES LIBRARY SECTION -->
+        <div id="activities-section" class="section">
+            <div class="card">
+                <div class="section-title">🎮 Activities Library</div>
+                <div class="section-subtitle">Browse fitness and cooking activities for youth</div>
+
+                <div class="sub-tabs">
+                    <button class="sub-tab active" onclick="switchSubTab('fitness-activities')">💪 Fitness Activities</button>
+                    <button class="sub-tab" onclick="switchSubTab('workout-generator')">🎯 Workout Plan Generator</button>
+                    <button class="sub-tab" onclick="switchSubTab('cooking-activities')">🍳 Cooking Activities</button>
+                    <button class="sub-tab" onclick="switchSubTab('games-activities')">🎯 Games</button>
+                </div>
+
+                <div id="fitness-activities-section" class="sub-section active">
+                    <div class="activity-library" id="fitnessLibrary">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <div id="workout-generator-section" class="sub-section">
+                    <div class="form-group">
+                        <label class="form-label">Select Workout Duration</label>
+                        <select id="workoutDuration" class="input-field">
+                            <option value="15">15 minutes (Quick Session)</option>
+                            <option value="30" selected>30 minutes (Standard Session)</option>
+                            <option value="45">45 minutes (Extended Session)</option>
+                            <option value="60">60 minutes (Full Workout)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Focus Area</label>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="focus-cardio" checked>
+                            <label for="focus-cardio">Cardio</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="focus-strength" checked>
+                            <label for="focus-strength">Strength</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="focus-core">
+                            <label for="focus-core">Core</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="focus-yoga">
+                            <label for="focus-yoga">Yoga/Stretching</label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-full" onclick="generateWorkoutPlan()">
+                        🎯 Generate Workout Plan
+                    </button>
+
+                    <div id="workoutPlanOutput" style="margin-top: 2rem;"></div>
+                </div>
+
+                <div id="cooking-activities-section" class="sub-section">
+                    <div class="activity-library" id="cookingLibrary">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <div id="games-activities-section" class="sub-section">
+                    <div class="activity-library" id="gamesLibrary">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STUDENT DATABASE SECTION -->
+        <div id="students-section" class="section">
+            <div class="card">
+                <div class="section-title">👥 Student Database</div>
+                <div class="section-subtitle">Manage student information and emergency contacts</div>
+
+                <div class="sub-tabs">
+                    <button class="sub-tab active" onclick="switchSubTab('view-students')">View Students</button>
+                    <button class="sub-tab" onclick="switchSubTab('add-student')">Add Student</button>
+                    <button class="sub-tab" onclick="switchSubTab('bulk-import')">Bulk Import</button>
+                </div>
+
+                <div id="view-students-section" class="sub-section active">
+                    <div id="studentsList">
+                        <!-- Students loaded dynamically -->
+                    </div>
+                </div>
+
+                <div id="add-student-section" class="sub-section">
+                    <div class="form-group">
+                        <label class="form-label">Student Name</label>
+                        <input type="text" id="newStudentName" class="input-field" placeholder="Full name">
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Grade</label>
+                            <input type="number" id="newStudentGrade" class="input-field" placeholder="Grade" min="1" max="12">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Age</label>
+                            <input type="number" id="newStudentAge" class="input-field" placeholder="Age" min="5" max="18">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Parent/Guardian Name</label>
+                        <input type="text" id="newParentName" class="input-field" placeholder="Full name">
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" id="newParentPhone" class="input-field" placeholder="(123) 456-7890">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email (optional)</label>
+                            <input type="email" id="newParentEmail" class="input-field" placeholder="parent@email.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Facebook Profile (optional)</label>
+                        <input type="text" id="newParentFacebook" class="input-field" placeholder="Facebook name or profile link">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Key Interests</label>
+                        <textarea id="newStudentInterests" class="input-field textarea-field" placeholder="What does this student enjoy? Sports, art, music, reading, etc."></textarea>
+                    </div>
+
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="newStudentSpecial">
+                        <label for="newStudentSpecial">Needs special attention</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Trigger Notes (optional)</label>
+                        <textarea id="newStudentTriggers" class="input-field textarea-field" placeholder="What situations might trigger negative behavior?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Success Strategies (optional)</label>
+                        <textarea id="newStudentStrategies" class="input-field textarea-field" placeholder="What strategies work well with this student?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Medical/Dietary Notes (optional)</label>
+                        <textarea id="newStudentMedical" class="input-field textarea-field" placeholder="Allergies, medications, dietary restrictions, etc."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Additional Notes (optional)</label>
+                        <textarea id="newStudentNotes" class="input-field textarea-field" placeholder="Any other important information about this student"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-full" onclick="addStudent()">Add Student to Database</button>
+                </div>
+
+                <div id="bulk-import-section" class="sub-section">
+                    <div class="form-group">
+                        <p style="margin-bottom: 1rem;">Import all students from your classroom list at once. This will add students with their names, grades, and parent contact information.</p>
+                        <button class="btn btn-primary btn-full" onclick="importClassroomList()">📥 Import 2025-2026 Classroom List</button>
+                    </div>
+                    
+                    <div id="importStatus" style="margin-top: 1rem;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK PLANNER SECTION (Original functionality) -->
+        <div id="planner-section" class="section">
+            <div class="card">
+                <div class="section-title">📋 Quick Program Planner</div>
+                <div class="section-subtitle">Generate activity recommendations for after-school and weekend programs</div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-number">1</span>
+                        Which students are attending?
+                    </label>
+                    <div class="student-grid" id="plannerStudentGrid">
+                        <!-- Students loaded dynamically -->
+                    </div>
+                    <p style="color: var(--gray-soft); font-size: 0.85rem; margin-top: 0.75rem;">
+                        Select students to get age-appropriate and interest-based recommendations
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-number">2</span>
+                        What's the vibe/energy level?
+                    </label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="plannerVibe" value="calm" id="planner-vibe-calm" checked>
+                            <label for="planner-vibe-calm" class="radio-label">Calm</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="plannerVibe" value="energetic" id="planner-vibe-energetic">
+                            <label for="planner-vibe-energetic" class="radio-label">Energetic</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="plannerVibe" value="tense" id="planner-vibe-tense">
+                            <label for="planner-vibe-tense" class="radio-label">Tense</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-number">3</span>
+                        Location/Resources
+                    </label>
+                    <div style="display: grid; gap: 0.5rem;">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="plannerArena">
+                            <label for="plannerArena">Arena available (skating)</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="plannerIndoor">
+                            <label for="plannerIndoor">Indoor space</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="plannerOutdoor">
+                            <label for="plannerOutdoor">Outdoor space</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-full" onclick="generateProgramPlan()">
+                    → GENERATE ACTIVITY RECOMMENDATIONS
+                </button>
+
+                <div id="programPlanOutput" style="display: none; margin-top: 2rem;">
+                    <!-- Plan output here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== DATA MODELS ====================
+        
+        const FITNESS_ACTIVITIES = [
+            {name: "Jumping Jacks", description: "Stand with feet together and arms at your sides. Jump your feet out wide while raising your arms overhead, then jump back to the starting position. Repeat for 30-60 seconds.", category: "Cardio", duration: "30-60 sec", equipment: "None"},
+            {name: "High Knees", description: "Stand in place and jog while lifting your knees as high as possible toward your chest, alternating legs quickly. Pump your arms for balance.", category: "Cardio", duration: "30-60 sec", equipment: "None"},
+            {name: "Butt Kicks", description: "Jog in place while kicking your heels back toward your glutes, alternating legs. Keep your upper body upright.", category: "Cardio", duration: "30-60 sec", equipment: "None"},
+            {name: "March in Place", description: "Stand tall and march by lifting one knee at a time toward your chest, swinging the opposite arm forward. Alternate sides slowly.", category: "Cardio", duration: "1-2 min", equipment: "None"},
+            {name: "Arm Circles", description: "Extend your arms out to the sides at shoulder height. Make small circles forward for 20 seconds, then backward. Gradually increase circle size if comfortable.", category: "Warm-up", duration: "40 sec", equipment: "None"},
+            {name: "Shoulder Rolls", description: "Stand or sit with arms relaxed. Roll your shoulders forward in a circular motion for 10 reps, then backward for 10 reps.", category: "Warm-up", duration: "1-2 min", equipment: "None"},
+            {name: "Neck Stretches", description: "Gently tilt your head to one side, bringing your ear toward your shoulder. Hold for 10-15 seconds, then switch sides. Repeat 2-3 times per side.", category: "Stretching", duration: "1-2 min", equipment: "None"},
+            {name: "Bodyweight Squats", description: "Stand with feet shoulder-width apart. Lower your body as if sitting back into a chair, keeping knees behind toes. Push through heels to stand. Do 10-15 reps.", category: "Strength", duration: "2-3 min", equipment: "None"},
+            {name: "Forward Lunges", description: "Step forward with one foot, lowering until both knees are bent at 90 degrees. Push back to start and alternate legs. Do 8-10 reps per leg.", category: "Strength", duration: "2-3 min", equipment: "None"},
+            {name: "Calf Raises", description: "Stand with feet hip-width apart. Rise onto your toes, lifting heels off the ground. Lower slowly. Repeat 15-20 times.", category: "Strength", duration: "2-3 min", equipment: "None"},
+            {name: "Knee Push-Ups", description: "Start in a plank position on your knees. Lower your chest toward the ground by bending elbows, then push back up. Do 8-12 reps.", category: "Strength", duration: "2-3 min", equipment: "None"},
+            {name: "Plank", description: "Lie face down, then lift your body onto forearms and toes, keeping a straight line from head to heels. Hold for 20-30 seconds.", category: "Core", duration: "20-30 sec", equipment: "None"},
+            {name: "Side Plank", description: "Lie on one side, propped on forearm and feet stacked. Lift hips to form a straight line. Hold 15-20 seconds per side.", category: "Core", duration: "30-40 sec", equipment: "None"},
+            {name: "Superman", description: "Lie face down with arms extended forward. Lift arms, chest, and legs off the ground simultaneously. Hold for 3-5 seconds, repeat 10 times.", category: "Core", duration: "2-3 min", equipment: "None"},
+            {name: "Bird Dog", description: "On all fours, extend one arm forward and the opposite leg back. Hold for 5 seconds, then switch sides. Do 8-10 reps per side.", category: "Core", duration: "2-3 min", equipment: "None"},
+            {name: "Crunches", description: "Lie on your back with knees bent. Curl your upper body toward your knees, lifting shoulders off the ground. Lower slowly. Do 10-15 reps.", category: "Core", duration: "2-3 min", equipment: "None"},
+            {name: "Bicycle Crunches", description: "Lie on back, hands behind head. Bring one knee toward chest while twisting to touch opposite elbow to knee. Alternate sides for 10-15 reps per side.", category: "Core", duration: "2-3 min", equipment: "None"},
+            {name: "Leg Raises", description: "Lie on back with hands at sides. Lift both legs toward the ceiling, then lower without touching the ground. Do 8-12 reps.", category: "Core", duration: "2-3 min", equipment: "None"},
+            {name: "Mountain Climbers", description: "In plank position, alternate driving knees toward chest quickly, like running in place. Continue for 30-45 seconds.", category: "Cardio", duration: "30-45 sec", equipment: "None"},
+            {name: "Modified Burpees", description: "Stand, squat down to place hands on ground, step feet back to plank, step forward, and stand up (no jump). Repeat 8-10 times.", category: "Full Body", duration: "2-3 min", equipment: "None"},
+            {name: "Imaginary Jump Rope", description: "Pretend to jump rope by hopping lightly on toes while swinging arms in circles. Do for 1-2 minutes.", category: "Cardio", duration: "1-2 min", equipment: "None"},
+            {name: "Shadow Boxing", description: "Stand with feet shoulder-width. Punch forward alternately with light jabs and hooks, keeping movements controlled. Box for 30-60 seconds.", category: "Cardio", duration: "30-60 sec", equipment: "None"},
+            {name: "Downward Dog", description: "Start on all fours, then lift hips up and back to form an inverted V. Press heels toward ground. Hold 20-30 seconds.", category: "Yoga", duration: "20-30 sec", equipment: "None"},
+            {name: "Cat-Cow Pose", description: "On all fours, alternate arching back up (cat) and dipping down (cow) while breathing. Do 10 cycles.", category: "Yoga", duration: "2-3 min", equipment: "None"},
+            {name: "Child's Pose", description: "Kneel, sit back on heels, and fold forward with arms extended. Hold for 20-30 seconds to stretch.", category: "Yoga", duration: "20-30 sec", equipment: "None"},
+            {name: "Warrior Pose", description: "Step one foot forward into a lunge, arms raised overhead. Hold for 15-20 seconds per side.", category: "Yoga", duration: "30-40 sec", equipment: "None"},
+            {name: "Tree Pose", description: "Stand on one foot, place the other foot on inner thigh or calf. Hands together at chest. Hold 15-20 seconds per side.", category: "Yoga", duration: "30-40 sec", equipment: "None"},
+            {name: "Bridge Pose", description: "Lie on back, knees bent. Lift hips toward ceiling, squeezing glutes. Hold 10-15 seconds, repeat 8 times.", category: "Yoga", duration: "2-3 min", equipment: "None"},
+            {name: "Cobra Pose", description: "Lie face down, hands under shoulders. Lift chest up while keeping hips down. Hold 10-15 seconds.", category: "Yoga", duration: "10-15 sec", equipment: "None"},
+            {name: "Seated Forward Bend", description: "Sit with legs extended. Reach forward toward toes, keeping back straight. Hold 20-30 seconds.", category: "Stretching", duration: "20-30 sec", equipment: "None"},
+            {name: "Butterfly Stretch", description: "Sit with soles of feet together, knees out. Gently press knees down. Hold 20-30 seconds.", category: "Stretching", duration: "20-30 sec", equipment: "None"},
+            {name: "Quad Stretch", description: "Stand, bend one knee back, grab ankle, and pull heel toward glutes. Hold 15-20 seconds per leg.", category: "Stretching", duration: "30-40 sec", equipment: "None"},
+            {name: "Hamstring Stretch", description: "Sit with one leg extended, other bent. Reach toward extended foot. Hold 15-20 seconds per leg.", category: "Stretching", duration: "30-40 sec", equipment: "None"},
+            {name: "Calf Stretch", description: "Stand facing a wall (if available) or just step one foot back, press heel down. Hold 15-20 seconds per leg.", category: "Stretching", duration: "30-40 sec", equipment: "None"},
+            {name: "Torso Twists", description: "Stand with feet wide. Twist upper body side to side, arms extended. Do 10-15 twists per side.", category: "Warm-up", duration: "2-3 min", equipment: "None"},
+            {name: "Wall Sit (Invisible Chair)", description: "Stand with back straight, lower as if sitting in a chair without support. Hold 20-30 seconds.", category: "Strength", duration: "20-30 sec", equipment: "None"},
+            {name: "Russian Twists", description: "Sit with knees bent, lean back slightly. Twist torso side to side. Do 10-15 reps per side.", category: "Core", duration: "2-3 min", equipment: "None"},
+            {name: "Heel Touches", description: "Lie on back, knees bent. Crunch up and reach to touch one heel, then the other. Alternate for 10-15 reps per side.", category: "Core", duration: "2-3 min", equipment: "None"},
+            {name: "Flutter Kicks", description: "Lie on back, hands under glutes. Lift legs slightly and kick up and down alternately. Do for 20-30 seconds.", category: "Core", duration: "20-30 sec", equipment: "None"},
+            {name: "Donkey Kicks", description: "On all fours, lift one leg back and up, keeping knee bent. Lower and repeat 10-15 times per leg.", category: "Strength", duration: "2-3 min", equipment: "None"},
+        ];
+
+        const COOKING_ACTIVITIES = [
+            {name: "Personal Pizzas", description: "Use tortillas or pita as base. Add sauce, cheese, veggies. Practice portioning and creativity.", category: "Main Dish", duration: "30-40 min", skills: "Spreading, measuring, oven use"},
+            {name: "Fruit Kebabs", description: "Thread colorful fruit on skewers. Learn color patterns, fine motor skills.", category: "Snack", duration: "20-25 min", skills: "Cutting, arranging"},
+            {name: "Trail Mix", description: "Mix nuts, dried fruit, whole grain cereal, chocolate chips. Practice measuring.", category: "Snack", duration: "15-20 min", skills: "Measuring, mixing"},
+            {name: "Smoothie Bowls", description: "Blend fruit, yogurt, milk. Top with granola and berries. Nutrition education.", category: "Breakfast", duration: "15-20 min", skills: "Blending, measuring"},
+            {name: "Veggie Wraps", description: "Spread hummus on tortilla, add veggies, roll up. Healthy assembly activity.", category: "Main Dish", duration: "20-25 min", skills: "Spreading, rolling"},
+            {name: "Energy Balls", description: "Mix oats, peanut butter, honey, chocolate chips. Roll into balls. No-bake treat.", category: "Snack", duration: "25-30 min", skills: "Mixing, rolling"},
+            {name: "Pancakes", description: "Mix batter, pour onto griddle. Practice measuring and following instructions.", category: "Breakfast", duration: "30-35 min", skills: "Measuring, mixing, cooking"},
+            {name: "Quesadillas", description: "Add cheese and fillings between tortillas. Simple cooking with variations.", category: "Main Dish", duration: "20-25 min", skills: "Assembling, cooking"},
+            {name: "Yogurt Parfaits", description: "Layer yogurt, granola, fruit in cups. Learn about layers and nutrition.", category: "Snack", duration: "15-20 min", skills: "Layering, measuring"},
+            {name: "Grilled Cheese", description: "Butter bread, add cheese, grill. Classic cooking skill.", category: "Main Dish", duration: "20-25 min", skills: "Spreading, grilling"},
+            {name: "Fruit Salad", description: "Cut and mix various fruits. Learn knife skills and food prep.", category: "Snack", duration: "25-30 min", skills: "Cutting, mixing"},
+            {name: "Tomato Soup", description: "Simple soup from canned tomatoes and seasonings. Introduce pot safety.", category: "Main Dish", duration: "30-35 min", skills: "Chopping, cooking, stirring"},
+        ];
+
+        const GAMES_LIBRARY = [
+            // Tag Games
+            {name: "Octopus Tag", description: "One player is the octopus in the center. Others run from one side to the other; tagged players join the octopus by holding hands and helping to tag more players.", minAge: 5, maxAge: 14, energy: "high", competition: "low", location: "indoor/outdoor"},
+            {name: "Manhunt", description: "Divide into two teams: one hides, the other seeks. When found, the hider joins the seekers or switches sides for added fun.", minAge: 8, maxAge: 14, energy: "high", competition: "medium", location: "indoor/outdoor"},
+            {name: "Line Tag", description: "Players must stay on drawn or imaginary lines (like gym floor lines or paths) while trying to tag each other without stepping off.", minAge: 6, maxAge: 14, energy: "high", competition: "medium", location: "indoor"},
+            {name: "Freeze Tag", description: "The tagger freezes players by tagging them. Frozen players stand still until another player tags them to unfreeze.", minAge: 4, maxAge: 12, energy: "high", competition: "low", location: "indoor/outdoor"},
+            {name: "Tunnel Tag", description: "Tagged players form a tunnel by spreading legs. Others crawl through to unfreeze them.", minAge: 5, maxAge: 12, energy: "high", competition: "low", location: "indoor/outdoor"},
+            {name: "Blob Tag", description: "Tagged players join hands with the tagger to form a growing 'blob' that tags more players together.", minAge: 6, maxAge: 14, energy: "high", competition: "team", location: "indoor/outdoor"},
+            {name: "Band-Aid Tag", description: "When tagged, hold the spot like a band-aid. After two tags, become a tagger or sit out.", minAge: 6, maxAge: 12, energy: "high", competition: "medium", location: "indoor/outdoor"},
+            {name: "Elbow Tag", description: "Players pair up and link elbows. One chaser and runner; runner links to a pair to make the other end chase.", minAge: 7, maxAge: 14, energy: "high", competition: "low", location: "indoor/outdoor"},
+            {name: "Turtle Tag", description: "Tagged players lie on their back like a turtle, waving arms and legs. Unfrozen when another player flips them over (tags).", minAge: 5, maxAge: 10, energy: "medium", competition: "low", location: "indoor/outdoor"},
+            {name: "Toilet Tag", description: "Tagged players squat like a toilet with one arm up as handle. Unfrozen when someone 'flushes' by pushing the arm down.", minAge: 6, maxAge: 12, energy: "high", competition: "low", location: "indoor/outdoor"},
+            {name: "Skunk Tag", description: "One tagger; tagged players hold nose like smelling a skunk and can only move with one hand free until tagging someone else.", minAge: 6, maxAge: 12, energy: "high", competition: "medium", location: "indoor/outdoor"},
+            {name: "Dead Ant Tag", description: "Tagged lie on back with legs up. Four untagged players must lift each limb to unfreeze.", minAge: 7, maxAge: 14, energy: "high", competition: "low", location: "indoor/outdoor"},
+            {name: "Hot Dog Tag", description: "Tagged lie down like a hot dog bun. Unfrozen when two players jump over them yelling 'hot dog!'", minAge: 5, maxAge: 10, energy: "high", competition: "low", location: "indoor/outdoor"},
+            {name: "Link Tag", description: "Tagged players hold hands in pairs or chains, continuing to tag as a group.", minAge: 6, maxAge: 12, energy: "high", competition: "team", location: "indoor/outdoor"},
+            {name: "Revenge Tag", description: "Tagged sit down. When the tagger who got you is tagged, stand up and resume playing.", minAge: 7, maxAge: 14, energy: "high", competition: "medium", location: "indoor/outdoor"},
+            {name: "Mission Impossible Tag", description: "Everyone is a tagger. Tagged sit until the person who tagged you is tagged.", minAge: 8, maxAge: 14, energy: "high", competition: "high", location: "indoor/outdoor"},
+            
+            // Classic Games
+            {name: "Hide and Seek", description: "One seeker counts while others hide. Seeker finds hiders; last found wins or becomes next seeker.", minAge: 4, maxAge: 12, energy: "medium", competition: "low", location: "indoor/outdoor"},
+            {name: "Capture the Flag", description: "Teams guard their flag (any object) while trying to steal the opponent's without being tagged.", minAge: 8, maxAge: 14, energy: "high", competition: "team", location: "outdoor"},
+            {name: "Duck Duck Goose", description: "Circle game: tap heads saying 'duck,' say 'goose' to chase around circle.", minAge: 4, maxAge: 8, energy: "medium", competition: "low", location: "indoor/outdoor"},
+            {name: "Simon Says", description: "Leader gives commands; follow only if prefixed with 'Simon says.'", minAge: 4, maxAge: 10, energy: "low", competition: "none", location: "indoor/outdoor"},
+            {name: "Red Light Green Light", description: "Leader turns back saying 'green light' to move, 'red light' to stop. Reach leader first.", minAge: 4, maxAge: 10, energy: "medium", competition: "low", location: "indoor/outdoor"},
+            {name: "Mother May I", description: "Players ask 'Mother may I take [steps]?' Mother approves or modifies; first to reach wins.", minAge: 5, maxAge: 10, energy: "medium", competition: "low", location: "indoor/outdoor"},
+            {name: "Sardines", description: "Reverse hide and seek: one hides, others find and join in hiding spot until all are packed.", minAge: 6, maxAge: 14, energy: "medium", competition: "none", location: "indoor/outdoor"},
+            {name: "Ghost in the Graveyard", description: "Hiders search for 'ghost' who hides and yells; race back to base without being tagged.", minAge: 7, maxAge: 14, energy: "high", competition: "medium", location: "outdoor"},
+            {name: "Follow the Leader", description: "Line up and mimic the leader's actions as they move around.", minAge: 4, maxAge: 10, energy: "medium", competition: "none", location: "indoor/outdoor"},
+            {name: "Sharks and Minnows", description: "Minnows cross area; shark in middle tags to turn into sharks.", minAge: 6, maxAge: 14, energy: "high", competition: "team", location: "indoor/outdoor"},
+            {name: "British Bulldog", description: "Players cross field; taggers in middle lift and tag to join them.", minAge: 8, maxAge: 14, energy: "high", competition: "team", location: "outdoor"},
+            {name: "Stuck in the Mud", description: "Tagged freeze with legs apart; unfrozen by crawling through legs.", minAge: 6, maxAge: 12, energy: "high", competition: "low", location: "indoor/outdoor"},
+            {name: "Cops and Robbers", description: "Teams: cops chase robbers; tagged robbers go to 'jail,' freed by teammates.", minAge: 7, maxAge: 14, energy: "high", competition: "team", location: "indoor/outdoor"},
+            {name: "Zombie Tag", description: "Tagged become zombies with stiff arms, tagging others slowly.", minAge: 6, maxAge: 14, energy: "high", competition: "medium", location: "indoor/outdoor"},
+            
+            // Cooperative & Low Competition
+            {name: "Parachute Games", description: "Various activities using a parachute", minAge: 4, maxAge: 12, energy: "medium", competition: "none", location: "indoor/outdoor"},
+            {name: "Charades", description: "Act out words or phrases without speaking; team guesses.", minAge: 6, maxAge: 14, energy: "low", competition: "team", location: "indoor"},
+            {name: "Telephone", description: "Whisper message around circle; see how it changes at the end.", minAge: 5, maxAge: 12, energy: "low", competition: "none", location: "indoor"},
+            
+            // Active Races
+            {name: "Wheelbarrow Races", description: "Partners: one holds the other's ankles, walking on hands. Race to a finish line.", minAge: 7, maxAge: 14, energy: "high", competition: "team", location: "indoor/outdoor"},
+            {name: "Invisible Obstacle Course", description: "Leader describes imaginary obstacles; players act out navigating them without touching 'real' ground.", minAge: 5, maxAge: 12, energy: "medium", competition: "none", location: "indoor/outdoor"},
+            
+            // Mind Games
+            {name: "Hand Game", description: "Players hide a small object (like a pebble) in one hand. Others guess which hand; correct guess wins a point.", minAge: 5, maxAge: 12, energy: "low", competition: "low", location: "indoor/outdoor"},
+            {name: "Rock in the Fist", description: "Similar to Hand Game: guess which fist holds the rock. Can be played in teams.", minAge: 5, maxAge: 10, energy: "low", competition: "low", location: "indoor/outdoor"},
+            {name: "Green Glass Door", description: "Riddle game: guess the rule (words with double letters pass through the door).", minAge: 8, maxAge: 14, energy: "low", competition: "none", location: "indoor"},
+            {name: "Black Magic", description: "Mind game where leader guesses objects based on secret signal from partner.", minAge: 8, maxAge: 14, energy: "low", competition: "none", location: "indoor"},
+            
+            // Traditional
+            {name: "Hopscotch", description: "Draw grid with stick, hop through tossing a stone, picking it up on return.", minAge: 5, maxAge: 10, energy: "medium", competition: "low", location: "outdoor"},
+            {name: "Toe Toss", description: "Players sit and toss a stick or small object using their toes, trying to catch or throw farthest.", minAge: 6, maxAge: 12, energy: "low", competition: "low", location: "indoor/outdoor"},
+            {name: "Make the Stick Jump", description: "Hold a stick horizontally between two players, jump over it, raising height each round.", minAge: 6, maxAge: 12, energy: "medium", competition: "low", location: "indoor/outdoor"},
+            {name: "Ring Games", description: "Players form a circle and pass a ring (or imaginary) while guessing who has it.", minAge: 5, maxAge: 12, energy: "low", competition: "none", location: "indoor/outdoor"},
+            {name: "Jump!", description: "Leader calls directions like 'jump left' or 'jump high'; players follow quickly or are out.", minAge: 5, maxAge: 10, energy: "high", competition: "low", location: "indoor/outdoor"},
+        ];
+
+        let students = [];
+        let antwaunSessions = {};
+        let musicBookings = {};
+
+        // ==================== INITIALIZATION ====================
+        
+        function initializeData() {
+            const savedStudents = localStorage.getItem('missionControl_v2_students');
+            const savedSessions = localStorage.getItem('missionControl_v2_antwaunSessions');
+            const savedBookings = localStorage.getItem('missionControl_v2_musicBookings');
+            
+            if (savedStudents) students = JSON.parse(savedStudents);
+            if (savedSessions) antwaunSessions = JSON.parse(savedSessions);
+            if (savedBookings) musicBookings = JSON.parse(savedBookings);
+
+            // Set today's date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('antwaunDate').value = today;
+            
+            loadFitnessLibrary();
+            loadCookingLibrary();
+            loadGamesLibrary();
+            loadDailySchedule();
+        }
+
+        function saveStudents() {
+            localStorage.setItem('missionControl_v2_students', JSON.stringify(students));
+        }
+
+        function saveAntwaunSessions() {
+            localStorage.setItem('missionControl_v2_antwaunSessions', JSON.stringify(antwaunSessions));
+        }
+
+        function saveMusicBookings() {
+            localStorage.setItem('missionControl_v2_musicBookings', JSON.stringify(musicBookings));
+        }
+
+        // ==================== NAVIGATION ====================
+
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`${tab}-section`).classList.add('active');
+
+            // Load appropriate data
+            if (tab === 'students') {
+                loadStudentsList();
+            } else if (tab === 'daily-calendar') {
+                loadDailySchedule();
+            } else if (tab === 'music-booking') {
+                const today = new Date();
+                document.getElementById('musicWeek').value = getWeekString(today);
+                loadMusicBookings();
+            } else if (tab === 'antwaun') {
+                updateAntwaunStats();
+                updateAntwaunCharts();
+                loadSessionHistory();
+                loadFoldersProgress();
+            } else if (tab === 'planner') {
+                loadPlannerStudents();
+            }
+        }
+
+        function switchSubTab(subtab) {
+            const parent = event.target.parentElement.parentElement;
+            parent.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            parent.querySelectorAll('.sub-section').forEach(s => s.classList.remove('active'));
+            parent.querySelector(`#${subtab}-section`).classList.add('active');
+
+            // Load data for specific sub-tabs
+            if (subtab === 'view-history') {
+                loadSessionHistory();
+            } else if (subtab === 'folders-progress') {
+                loadFoldersProgress();
+            }
+        }
+
+        // ==================== FITNESS WORKOUT PLAN GENERATOR ====================
+
+        function generateWorkoutPlan() {
+            const duration = parseInt(document.getElementById('workoutDuration').value);
+            const focusCardio = document.getElementById('focus-cardio').checked;
+            const focusStrength = document.getElementById('focus-strength').checked;
+            const focusCore = document.getElementById('focus-core').checked;
+            const focusYoga = document.getElementById('focus-yoga').checked;
+
+            let availableActivities = [];
+            
+            if (focusCardio) availableActivities = availableActivities.concat(FITNESS_ACTIVITIES.filter(a => a.category === 'Cardio'));
+            if (focusStrength) availableActivities = availableActivities.concat(FITNESS_ACTIVITIES.filter(a => a.category === 'Strength'));
+            if (focusCore) availableActivities = availableActivities.concat(FITNESS_ACTIVITIES.filter(a => a.category === 'Core'));
+            if (focusYoga) availableActivities = availableActivities.concat(FITNESS_ACTIVITIES.filter(a => a.category === 'Yoga' || a.category === 'Stretching'));
+
+            if (availableActivities.length === 0) {
+                alert('Please select at least one focus area');
+                return;
+            }
+
+            const shuffled = availableActivities.sort(() => 0.5 - Math.random());
+            const plan = [];
+            
+            plan.push({name: "Warm-up", activities: ["Arm Circles", "Shoulder Rolls", "March in Place"], duration: 5, phase: "warm-up"});
+            
+            const mainDuration = duration - 10;
+            let mainActivities = [];
+            let mainTime = 0;
+            
+            for (let activity of shuffled) {
+                if (mainTime >= mainDuration) break;
+                mainActivities.push(activity);
+                mainTime += 2;
+            }
+
+            plan.push({name: "Main Workout", activities: mainActivities, duration: mainTime, phase: "main"});
+            plan.push({name: "Cool Down", activities: ["Child's Pose", "Seated Forward Bend", "Neck Stretches"], duration: 5, phase: "cooldown"});
+
+            displayWorkoutPlan(plan, duration);
+        }
+
+        function displayWorkoutPlan(plan, totalDuration) {
+            const output = document.getElementById('workoutPlanOutput');
+            
+            let html = `<div class="workout-plan-header" style="text-align: center; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">🎯 Your Personalized Workout Plan</h3>
+                <p style="color: var(--gray-soft);">Total Duration: ${totalDuration} minutes</p>
+            </div>`;
+
+            plan.forEach((phase, index) => {
+                const phaseColor = phase.phase === 'warm-up' ? '#10b981' : phase.phase === 'main' ? '#f97316' : '#60a5fa';
+                
+                html += `<div class="workout-phase" style="border-left: 4px solid ${phaseColor}; margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <h4 style="color: ${phaseColor}; font-size: 1.2rem;">${index + 1}. ${phase.name}</h4>
+                        <span style="background: rgba(255,255,255,0.1); padding: 0.3rem 0.8rem; border-radius: 12px;">${phase.duration} min</span>
+                    </div>`;
+
+                if (Array.isArray(phase.activities[0]) || typeof phase.activities[0] === 'string') {
+                    phase.activities.forEach(act => html += `<div style="padding: 0.5rem 0; color: var(--cream);">• ${act}</div>`);
+                } else {
+                    phase.activities.forEach(act => {
+                        html += `<div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem;">
+                            <div style="font-weight: 600; margin-bottom: 0.3rem;">${act.name}</div>
+                            <div style="font-size: 0.85rem; color: var(--gray-soft); margin-bottom: 0.5rem;">${act.description}</div>
+                            <div><span class="activity-tag">${act.category}</span> <span class="activity-tag">${act.duration}</span></div>
+                        </div>`;
+                    });
+                }
+                html += `</div>`;
+            });
+
+            html += `<div style="margin-top: 2rem; padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 12px;">
+                <strong style="color: #10b981;">💡 Pro Tips:</strong>
+                <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--gray-soft);">
+                    <li>Stay hydrated</li>
+                    <li>Focus on form over speed</li>
+                    <li>Take breaks when needed</li>
+                </ul>
+            </div>`;
+
+            output.innerHTML = html;
+        }
+
+        function showSuccessAnimation() {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 2rem 3rem; border-radius: 16px; font-size: 1.5rem; font-weight: 700; z-index: 10000; box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4);';
+            overlay.innerHTML = '✅ Progress Saved!';
+            document.body.appendChild(overlay);
+            setTimeout(() => overlay.remove(), 1500);
+        }
+
+        function getCategoryFromActivity(activityName) {
+            if (!activityName) return 'program';
+            if (activityName.includes('Lexia') || activityName.includes('Math')) return 'academics';
+            if (activityName.includes('Music') || activityName.includes('Drumming')) return 'music';
+            if (activityName.includes('CANCELLED')) return 'cancelled';
+            if (FITNESS_ACTIVITIES.some(a => activityName.includes(a.name))) return 'fitness';
+            if (COOKING_ACTIVITIES.some(a => activityName.includes(a.name))) return 'cooking';
+            if (GAMES_LIBRARY.some(g => activityName.includes(g.name))) return 'games';
+            return 'program';
+        }
+
+        function getActivityIcon(category) {
+            const icons = {academics: '📚', fitness: '💪', music: '🎵', cooking: '🍳', games: '🎮', program: '📋', cancelled: '❌'};
+            return icons[category] || '📋';
+        }
+
+        // ==================== INITIALIZATION ====================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            
+            // Initialize Antwaun's dashboard
+            updateAntwaunStats();
+            updateAntwaunCharts();
+        });
+
+        // ==================== DAILY SCHEDULE ====================
+
+        const ACTIVITY_OPTIONS = [
+            // Special option
+            {category: "Status", value: "CANCELLED", label: "❌ CANCELLED / No Activity"},
+            
+            // 1-on-1 Activities
+            {category: "1-on-1 Academics", value: "Lexia", label: "Lexia (30+ min)"},
+            {category: "1-on-1 Academics", value: "School21 Math", label: "School21 Mathematics"},
+            {category: "1-on-1 Academics", value: "Music Class", label: "Music Class (15 min)"},
+            
+            // Cultural Activities
+            {category: "Cultural", value: "Drumming", label: "🥁 Cultural Drumming"},
+            {category: "Cultural", value: "Drumming - Arena", label: "🥁 Drumming (with Arena open)"},
+            
+            // Cardio Fitness
+            {category: "Fitness - Cardio", value: "Jumping Jacks", label: "Jumping Jacks"},
+            {category: "Fitness - Cardio", value: "High Knees", label: "High Knees"},
+            {category: "Fitness - Cardio", value: "Butt Kicks", label: "Butt Kicks"},
+            {category: "Fitness - Cardio", value: "March in Place", label: "March in Place"},
+            {category: "Fitness - Cardio", value: "Mountain Climbers", label: "Mountain Climbers"},
+            {category: "Fitness - Cardio", value: "Imaginary Jump Rope", label: "Imaginary Jump Rope"},
+            {category: "Fitness - Cardio", value: "Shadow Boxing", label: "Shadow Boxing"},
+            
+            // Strength Fitness
+            {category: "Fitness - Strength", value: "Bodyweight Squats", label: "Bodyweight Squats"},
+            {category: "Fitness - Strength", value: "Forward Lunges", label: "Forward Lunges"},
+            {category: "Fitness - Strength", value: "Calf Raises", label: "Calf Raises"},
+            {category: "Fitness - Strength", value: "Knee Push-Ups", label: "Knee Push-Ups"},
+            {category: "Fitness - Strength", value: "Wall Sit", label: "Wall Sit (Invisible Chair)"},
+            {category: "Fitness - Strength", value: "Donkey Kicks", label: "Donkey Kicks"},
+            
+            // Core Fitness
+            {category: "Fitness - Core", value: "Plank", label: "Plank"},
+            {category: "Fitness - Core", value: "Side Plank", label: "Side Plank"},
+            {category: "Fitness - Core", value: "Superman", label: "Superman"},
+            {category: "Fitness - Core", value: "Bird Dog", label: "Bird Dog"},
+            {category: "Fitness - Core", value: "Crunches", label: "Crunches"},
+            {category: "Fitness - Core", value: "Bicycle Crunches", label: "Bicycle Crunches"},
+            {category: "Fitness - Core", value: "Leg Raises", label: "Leg Raises"},
+            {category: "Fitness - Core", value: "Russian Twists", label: "Russian Twists"},
+            {category: "Fitness - Core", value: "Heel Touches", label: "Heel Touches"},
+            {category: "Fitness - Core", value: "Flutter Kicks", label: "Flutter Kicks"},
+            
+            // Yoga
+            {category: "Fitness - Yoga", value: "Downward Dog", label: "Downward Dog"},
+            {category: "Fitness - Yoga", value: "Cat-Cow Pose", label: "Cat-Cow Pose"},
+            {category: "Fitness - Yoga", value: "Child's Pose", label: "Child's Pose"},
+            {category: "Fitness - Yoga", value: "Warrior Pose", label: "Warrior Pose"},
+            {category: "Fitness - Yoga", value: "Tree Pose", label: "Tree Pose"},
+            {category: "Fitness - Yoga", value: "Bridge Pose", label: "Bridge Pose"},
+            {category: "Fitness - Yoga", value: "Cobra Pose", label: "Cobra Pose"},
+            
+            // Stretching
+            {category: "Fitness - Stretching", value: "Neck Stretches", label: "Neck Stretches"},
+            {category: "Fitness - Stretching", value: "Arm Circles", label: "Arm Circles"},
+            {category: "Fitness - Stretching", value: "Shoulder Rolls", label: "Shoulder Rolls"},
+            {category: "Fitness - Stretching", value: "Seated Forward Bend", label: "Seated Forward Bend"},
+            {category: "Fitness - Stretching", value: "Butterfly Stretch", label: "Butterfly Stretch"},
+            {category: "Fitness - Stretching", value: "Quad Stretch", label: "Quad Stretch"},
+            {category: "Fitness - Stretching", value: "Hamstring Stretch", label: "Hamstring Stretch"},
+            {category: "Fitness - Stretching", value: "Calf Stretch", label: "Calf Stretch"},
+            {category: "Fitness - Stretching", value: "Torso Twists", label: "Torso Twists"},
+            
+            // Full Body
+            {category: "Fitness - Full Body", value: "Modified Burpees", label: "Modified Burpees"},
+            
+            // Cooking
+            {category: "Cooking", value: "Personal Pizzas", label: "Making Personal Pizzas"},
+            {category: "Cooking", value: "Fruit Kebabs", label: "Fruit Kebabs"},
+            {category: "Cooking", value: "Trail Mix", label: "Trail Mix Making"},
+            {category: "Cooking", value: "Smoothie Bowls", label: "Smoothie Bowls"},
+            {category: "Cooking", value: "Veggie Wraps", label: "Veggie Wraps"},
+            {category: "Cooking", value: "Quesadillas", label: "Quesadillas"},
+            {category: "Cooking", value: "Energy Balls", label: "Energy Balls"},
+            {category: "Cooking", value: "Pancakes", label: "Pancakes"},
+            {category: "Cooking", value: "Yogurt Parfaits", label: "Yogurt Parfaits"},
+            {category: "Cooking", value: "Grilled Cheese", label: "Grilled Cheese"},
+            
+            // Games - Tag
+            {category: "Games - Tag", value: "Octopus Tag", label: "Octopus Tag"},
+            {category: "Games - Tag", value: "Freeze Tag", label: "Freeze Tag"},
+            {category: "Games - Tag", value: "Line Tag", label: "Line Tag"},
+            {category: "Games - Tag", value: "Blob Tag", label: "Blob Tag"},
+            {category: "Games - Tag", value: "Tunnel Tag", label: "Tunnel Tag"},
+            {category: "Games - Tag", value: "Zombie Tag", label: "Zombie Tag"},
+            
+            // Games - Classic
+            {category: "Games - Classic", value: "Duck Duck Goose", label: "Duck Duck Goose"},
+            {category: "Games - Classic", value: "Red Light Green Light", label: "Red Light Green Light"},
+            {category: "Games - Classic", value: "Simon Says", label: "Simon Says"},
+            {category: "Games - Classic", value: "Hide and Seek", label: "Hide and Seek"},
+            {category: "Games - Classic", value: "Sharks and Minnows", label: "Sharks and Minnows"},
+            {category: "Games - Classic", value: "Capture the Flag", label: "Capture the Flag"},
+            
+            // Games - Cooperative
+            {category: "Games - Cooperative", value: "Parachute Games", label: "Parachute Games"},
+            {category: "Games - Cooperative", value: "Follow the Leader", label: "Follow the Leader"},
+            {category: "Games - Cooperative", value: "Telephone", label: "Telephone"},
+            
+            // Program blocks
+            {category: "Program Blocks", value: "Lunch - Eating", label: "Lunch - Eating Time"},
+            {category: "Program Blocks", value: "Lunch - Games", label: "Lunch - Games"},
+            {category: "Program Blocks", value: "After School Games", label: "After School Games"},
+            {category: "Program Blocks", value: "Snack Time", label: "Snack Time"},
+            {category: "Program Blocks", value: "Cleanup", label: "Cleanup & Dismissal"},
+            {category: "Program Blocks", value: "Free Play", label: "Free Play"},
+            {category: "Program Blocks", value: "Arena Time", label: "Arena - Skating"},
+        ];
+
+        let dailyScheduleData = {};
+
+        function loadDailySchedule() {
+            const today = new Date();
+            const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
+            const dateStr = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            const dateKey = today.toISOString().split('T')[0];
+            
+            document.getElementById('calendar-date').textContent = dateStr;
+
+            // Load saved schedule or generate default
+            const savedSchedules = JSON.parse(localStorage.getItem('missionControl_v2_schedules') || '{}');
+            if (!savedSchedules[dateKey]) {
+                savedSchedules[dateKey] = generateDefaultSchedule(dayName);
+                localStorage.setItem('missionControl_v2_schedules', JSON.stringify(savedSchedules));
+            }
+            dailyScheduleData = savedSchedules[dateKey];
+
+            renderSchedule();
+        }
+
+        function generateDefaultSchedule(dayName) {
+            return {
+                // 15-minute intervals from 12-1
+                "12:00": {activity: "Lunch - Eating", description: "Students eat lunch - supervise"},
+                "12:15": {activity: "Lunch - Games", description: "Active play and games"},
+                "12:30": {activity: null, description: ""},
+                "12:45": {activity: null, description: ""},
+                
+                // 30-minute intervals after 1:00
+                "1:00": {activity: "Lexia", description: "Antwaun - 30 min Lexia (minimum)"},
+                "1:30": {activity: "School21 Math", description: "Antwaun - 30-60 min mathematics"},
+                "2:00": {activity: null, description: ""},
+                "2:30": {activity: null, description: ""},
+                "3:00": {activity: null, description: ""},
+                "3:30": {activity: "After School Games", description: "Active play - see age group"},
+                "4:00": {activity: "After School Games", description: "Continue activities"},
+                "4:30": {activity: "Snack Time", description: "Quick snack - 15 min"},
+                "4:45": {activity: "Cleanup", description: "Cleanup and dismissal prep"},
+            };
+        }
+
+        function renderSchedule() {
+            const grid = document.getElementById('dailySchedule');
+            const times = Object.keys(dailyScheduleData).sort();
+            
+            let html = '';
+            times.forEach(time => {
+                const block = dailyScheduleData[time];
+                const category = getCategoryFromActivity(block.activity);
+                const icon = getActivityIcon(category);
+                
+                html += `
+                    <div class="time-slot">${time}</div>
+                    <div class="activity-slot ${block.activity ? 'filled category-' + category : ''}" onclick="openActivityModal('${time}')">
+                        ${block.activity ? `
+                            <div class="activity-block">
+                                <div class="activity-block-title">
+                                    <span class="activity-icon">${icon}</span>
+                                    ${block.activity}
+                                    <span class="activity-category-badge badge-${category}">${category}</span>
+                                </div>
+                                <div class="activity-block-desc">${block.description || ''}</div>
+                                <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem;">
+                                    <button class="btn-small btn-secondary" onclick="event.stopPropagation(); editActivity('${time}')">Edit</button>
+                                    <button class="btn-small delete-btn" onclick="event.stopPropagation(); deleteActivity('${time}')">Remove</button>
+                                </div>
+                            </div>
+                        ` : '<span style="color: var(--gray-soft);">Click to add activity</span>'}
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = html;
+        }
+
+        function openActivityModal(time) {
+            const currentActivity = dailyScheduleData[time].activity;
+            const currentDesc = dailyScheduleData[time].description;
+
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center;';
+            
+            modal.innerHTML = `
+                <div style="background: var(--navy-mid); padding: 2rem; border-radius: 16px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
+                    <h2 style="margin-bottom: 1rem; color: var(--amber-warm);">Activity for ${time}</h2>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">1. Select Category:</label>
+                        <select id="categorySelect" class="input-field" onchange="updateSpecificActivities()">
+                            <option value="">-- Choose Category --</option>
+                            <option value="cancelled">❌ Cancelled</option>
+                            <option value="academics">📚 Academics (Lexia, Math)</option>
+                            <option value="music">🎵 Music</option>
+                            <option value="drumming">🥁 Drumming</option>
+                            <option value="fitness">💪 Fitness</option>
+                            <option value="cooking">🍳 Cooking</option>
+                            <option value="games">🎮 Games</option>
+                            <option value="skating">⛸️ Arena/Skating</option>
+                            <option value="program">📋 Program Block</option>
+                        </select>
+                    </div>
+                    
+                    <div id="specificActivityContainer" style="margin-bottom: 1.5rem; display: none;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">2. Select Specific Activity:</label>
+                        <select id="specificActivitySelect" class="input-field">
+                            <option value="">-- Choose Activity --</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Description/Notes:</label>
+                        <textarea id="activityDescription" class="input-field" style="min-height: 80px;">${currentDesc || ''}</textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-primary" onclick="saveActivity('${time}')">Save</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            window.currentModal = modal;
+            
+            // Pre-select if editing existing activity
+            if (currentActivity) {
+                const category = getCategoryFromActivity(currentActivity);
+                document.getElementById('categorySelect').value = category;
+                updateSpecificActivities();
+                setTimeout(() => {
+                    document.getElementById('specificActivitySelect').value = currentActivity;
+                }, 100);
+            }
+        }
+
+        function updateSpecificActivities() {
+            const category = document.getElementById('categorySelect').value;
+            const container = document.getElementById('specificActivityContainer');
+            const select = document.getElementById('specificActivitySelect');
+            
+            if (!category) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'block';
+            select.innerHTML = '<option value="">-- Choose Activity --</option>';
+            
+            if (category === 'cancelled') {
+                select.innerHTML = '<option value="CANCELLED">Activity Cancelled</option>';
+                select.value = 'CANCELLED';
+                return;
+            }
+            
+            if (category === 'academics') {
+                select.innerHTML += '<option value="Lexia">Lexia (Reading)</option>';
+                select.innerHTML += '<option value="School21 Math">School21 Mathematics</option>';
+            }
+            else if (category === 'music') {
+                select.innerHTML += '<option value="Music Class">Music Class (15 min)</option>';
+            }
+            else if (category === 'drumming') {
+                select.innerHTML += '<option value="Drumming">Cultural Drumming</option>';
+                select.innerHTML += '<option value="Drumming - Arena">Drumming (with Arena open)</option>';
+            }
+            else if (category === 'fitness') {
+                FITNESS_ACTIVITIES.forEach(act => {
+                    select.innerHTML += `<option value="${act.name}">${act.name}</option>`;
+                });
+            }
+            else if (category === 'cooking') {
+                COOKING_ACTIVITIES.forEach(act => {
+                    select.innerHTML += `<option value="${act.name}">${act.name}</option>`;
+                });
+            }
+            else if (category === 'games') {
+                GAMES_LIBRARY.forEach(game => {
+                    select.innerHTML += `<option value="${game.name}">${game.name}</option>`;
+                });
+            }
+            else if (category === 'skating') {
+                select.innerHTML += '<option value="Arena Time">Arena - Skating</option>';
+                select.innerHTML += '<option value="Arena - Free Play">Arena - Free Play</option>';
+            }
+            else if (category === 'program') {
+                select.innerHTML += '<option value="Lunch - Eating">Lunch - Eating Time</option>';
+                select.innerHTML += '<option value="Lunch - Games">Lunch - Games</option>';
+                select.innerHTML += '<option value="After School Games">After School Games</option>';
+                select.innerHTML += '<option value="Snack Time">Snack Time</option>';
+                select.innerHTML += '<option value="Cleanup">Cleanup & Dismissal</option>';
+                select.innerHTML += '<option value="Free Play">Free Play</option>';
+            }
+        }
+
+        function updateActivityDescription() {
+            // Auto-fill description based on activity type (optional)
+        }
+
+        function saveActivity(time) {
+            const specificSelect = document.getElementById('specificActivitySelect');
+            const activity = specificSelect.value;
+            const description = document.getElementById('activityDescription').value;
+            
+            if (!activity) {
+                alert('Please select a category and specific activity');
+                return;
+            }
+
+            dailyScheduleData[time] = { activity, description };
+            
+            // Save to localStorage
+            const today = new Date().toISOString().split('T')[0];
+            const savedSchedules = JSON.parse(localStorage.getItem('missionControl_v2_schedules') || '{}');
+            savedSchedules[today] = dailyScheduleData;
+            localStorage.setItem('missionControl_v2_schedules', JSON.stringify(savedSchedules));
+            
+            closeModal();
+            renderSchedule();
+        }
+
+        function editActivity(time) {
+            openActivityModal(time);
+        }
+
+        function deleteActivity(time) {
+            if (!confirm('Remove this activity?')) return;
+            
+            dailyScheduleData[time] = { activity: null, description: '' };
+            
+            // Save to localStorage
+            const today = new Date().toISOString().split('T')[0];
+            const savedSchedules = JSON.parse(localStorage.getItem('missionControl_v2_schedules') || '{}');
+            savedSchedules[today] = dailyScheduleData;
+            localStorage.setItem('missionControl_v2_schedules', JSON.stringify(savedSchedules));
+            
+            renderSchedule();
+        }
+
+        function closeModal() {
+            if (window.currentModal) {
+                window.currentModal.remove();
+                window.currentModal = null;
+            }
+        }
+
+        function printSchedule() {
+            window.print();
+        }
+
+        // ==================== ANTWAUN'S SCHEDULE ====================
+
+        function saveAntwaunSession() {
+            const date = document.getElementById('antwaunDate').value;
+            if (!date) {
+                alert('Please select a date');
+                return;
+            }
+
+            const session = {
+                date: date,
+                lexia: parseInt(document.getElementById('lexiaMinutes').value) || 0,
+                lexiaCategory: document.getElementById('lexiaCategory').value,
+                math: parseInt(document.getElementById('mathMinutes').value) || 0,
+                mathFolder: document.getElementById('mathFolder').value,
+                musicTime: document.getElementById('musicTime').value,
+                musicBooked: document.getElementById('musicBooked').checked,
+                fitness: document.getElementById('fitnessActivity').value,
+                fitnessMinutes: parseInt(document.getElementById('fitnessMinutes').value) || 0,
+                notes: document.getElementById('sessionNotes').value
+            };
+
+            antwaunSessions[date] = session;
+            saveAntwaunSessions();
+            updateAntwaunStats();
+            updateAntwaunCharts();
+            
+            // Show success animation
+            showSuccessAnimation();
+            
+            alert('✅ Session saved successfully!');
+        }
+
+        function loadAntwaunSession() {
+            const date = document.getElementById('antwaunDate').value;
+            if (!date) return;
+
+            const session = antwaunSessions[date];
+            if (session) {
+                document.getElementById('lexiaMinutes').value = session.lexia || '';
+                document.getElementById('lexiaCategory').value = session.lexiaCategory || '';
+                document.getElementById('mathMinutes').value = session.math || '';
+                document.getElementById('mathFolder').value = session.mathFolder || '';
+                document.getElementById('musicTime').value = session.musicTime || '';
+                document.getElementById('musicBooked').checked = session.musicBooked || false;
+                document.getElementById('fitnessActivity').value = session.fitness || '';
+                document.getElementById('fitnessMinutes').value = session.fitnessMinutes || '';
+                document.getElementById('sessionNotes').value = session.notes || '';
+            } else {
+                // Clear form for new entry
+                document.getElementById('lexiaMinutes').value = '';
+                document.getElementById('lexiaCategory').value = '';
+                document.getElementById('mathMinutes').value = '';
+                document.getElementById('mathFolder').value = '';
+                document.getElementById('musicTime').value = '';
+                document.getElementById('musicBooked').checked = false;
+                document.getElementById('fitnessActivity').value = '';
+                document.getElementById('fitnessMinutes').value = '';
+                document.getElementById('sessionNotes').value = '';
+            }
+        }
+
+        function updateAntwaunStats() {
+            const today = new Date();
+            const weekAgo = new Date(today);
+            weekAgo.setDate(weekAgo.getDate() - 7);
+
+            let weekLexia = 0, weekMath = 0, weekMusic = 0, weekFitness = 0;
+
+            Object.keys(antwaunSessions).forEach(dateKey => {
+                const sessionDate = new Date(dateKey);
+                if (sessionDate >= weekAgo && sessionDate <= today) {
+                    const session = antwaunSessions[dateKey];
+                    weekLexia += session.lexia || 0;
+                    weekMath += session.math || 0;
+                    if (session.musicBooked) weekMusic++;
+                    if (session.fitness) weekFitness++;
+                }
+            });
+
+            document.getElementById('totalLexiaMinutes').textContent = weekLexia;
+            document.getElementById('lexiaTrend').textContent = `${Math.round(weekLexia / 7)} avg/day`;
+            
+            document.getElementById('totalMathMinutes').textContent = weekMath;
+            document.getElementById('mathTrend').textContent = `${Math.round(weekMath / 7)} avg/day`;
+            
+            document.getElementById('musicClassesCount').textContent = weekMusic;
+            document.getElementById('musicTrend').textContent = `${weekMusic} classes`;
+            
+            document.getElementById('fitnessCount').textContent = weekFitness;
+            document.getElementById('fitnessTrend').textContent = `${weekFitness} activities`;
+
+            // Gamification badges
+            document.getElementById('lexiaBadge').textContent = weekLexia >= 210 ? '🏆' : weekLexia >= 150 ? '⭐' : weekLexia >= 100 ? '🌟' : '';
+            document.getElementById('mathBadge').textContent = weekMath >= 350 ? '🏆' : weekMath >= 210 ? '⭐' : weekMath >= 150 ? '🌟' : '';
+            document.getElementById('musicBadge').textContent = weekMusic >= 4 ? '🏆' : weekMusic >= 3 ? '⭐' : weekMusic >= 2 ? '🌟' : '';
+            document.getElementById('fitnessBadge').textContent = weekFitness >= 5 ? '🏆' : weekFitness >= 4 ? '⭐' : weekFitness >= 3 ? '🌟' : '';
+        }
+
+        function updateAntwaunCharts() {
+            const today = new Date();
+            const last7Days = [];
+            
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                last7Days.push(date.toISOString().split('T')[0]);
+            }
+
+            // Lexia chart
+            const lexiaData = last7Days.map(date => {
+                const session = antwaunSessions[date];
+                return {
+                    date: new Date(date).toLocaleDateString('en-US', {weekday: 'short'}),
+                    value: session ? session.lexia || 0 : 0
+                };
+            });
+
+            renderChart('lexiaChart', lexiaData, 'Lexia Minutes');
+
+            // Math chart
+            const mathData = last7Days.map(date => {
+                const session = antwaunSessions[date];
+                return {
+                    date: new Date(date).toLocaleDateString('en-US', {weekday: 'short'}),
+                    value: session ? session.math || 0 : 0
+                };
+            });
+
+            renderChart('mathChart', mathData, 'Math Minutes');
+        }
+
+        function renderChart(containerId, data, label) {
+            const container = document.getElementById(containerId);
+            const maxValue = Math.max(...data.map(d => d.value), 30); // Minimum scale of 30
+            
+            let html = '<div class="chart-container">';
+            data.forEach(point => {
+                const height = (point.value / maxValue) * 100;
+                html += `
+                    <div class="chart-column">
+                        <div class="chart-value">${point.value}</div>
+                        <div class="chart-bar" style="height: ${height}%;"></div>
+                        <div class="chart-label">${point.date}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        function loadSessionHistory() {
+            const history = document.getElementById('sessionHistory');
+            const sessions = Object.keys(antwaunSessions)
+                .sort((a, b) => new Date(b) - new Date(a)); // Show ALL sessions, not just 10
+
+            if (sessions.length === 0) {
+                history.innerHTML = '<p style="color: var(--gray-soft); text-align: center; padding: 2rem;">No sessions logged yet.</p>';
+                return;
+            }
+
+            let html = `<div style="margin-bottom: 1rem; color: var(--amber-warm); font-weight: 600;">📚 Complete Session History (${sessions.length} sessions)</div>`;
+            
+            sessions.forEach(dateKey => {
+                const session = antwaunSessions[dateKey];
+                const date = new Date(dateKey);
+                const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+                
+                html += `
+                    <div class="contact-card" style="margin-bottom: 1rem; border-left: 3px solid #60a5fa;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                            <div>
+                                <div style="font-size: 1.1rem; font-weight: 600; color: var(--amber-warm);">${dateStr}</div>
+                            </div>
+                            <button class="btn-small btn-secondary" onclick="editSession('${dateKey}')">Edit</button>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                            <div style="background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.8rem; color: #60a5fa; text-transform: uppercase; font-weight: 600;">📖 Lexia</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #60a5fa;">${session.lexia || 0} <span style="font-size: 0.9rem;">min</span></div>
+                                ${session.lexiaCategory ? `<div style="font-size: 0.8rem; color: var(--gray-soft); margin-top: 0.25rem;">${session.lexiaCategory}</div>` : ''}
+                            </div>
+                            
+                            <div style="background: rgba(249, 115, 22, 0.1); padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.8rem; color: #f97316; text-transform: uppercase; font-weight: 600;">📐 Math</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #f97316;">${session.math || 0} <span style="font-size: 0.9rem;">min</span></div>
+                                ${session.mathFolder ? `<div style="font-size: 0.8rem; color: var(--gray-soft); margin-top: 0.25rem;">${session.mathFolder}</div>` : ''}
+                            </div>
+                            
+                            <div style="background: rgba(16, 185, 129, 0.1); padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.8rem; color: #10b981; text-transform: uppercase; font-weight: 600;">🎵 Music</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">${session.musicBooked ? '✓' : '—'}</div>
+                                ${session.musicTime ? `<div style="font-size: 0.8rem; color: var(--gray-soft); margin-top: 0.25rem;">${session.musicTime}</div>` : ''}
+                            </div>
+                            
+                            <div style="background: rgba(167, 139, 250, 0.1); padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.8rem; color: #a78bfa; text-transform: uppercase; font-weight: 600;">💪 Fitness</div>
+                                <div style="font-size: 1rem; font-weight: 600; color: #a78bfa;">${session.fitness || 'None'}</div>
+                                ${session.fitnessMinutes ? `<div style="font-size: 0.8rem; color: var(--gray-soft); margin-top: 0.25rem;">${session.fitnessMinutes} minutes</div>` : ''}
+                            </div>
+                        </div>
+                        
+                        ${session.notes ? `
+                            <div style="background: rgba(255, 255, 255, 0.03); padding: 0.75rem; border-radius: 8px; border-left: 2px solid var(--amber-warm);">
+                                <strong style="font-size: 0.85rem;">Session Notes:</strong>
+                                <div style="color: var(--gray-soft); font-size: 0.9rem; margin-top: 0.25rem;">${session.notes}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function editSession(dateKey) {
+            document.getElementById('antwaunDate').value = dateKey;
+            loadAntwaunSession();
+            // Switch to log session tab
+            document.querySelectorAll('#antwaun-section .sub-tab')[0].click();
+        }
+
+        function loadFoldersProgress() {
+            const folders = ['Multiplication', 'Division', 'Addition', 'Subtraction', 'Decimals', 'Fractions', 'Word Problems'];
+            const folderCounts = {};
+            
+            folders.forEach(folder => folderCounts[folder] = 0);
+
+            Object.values(antwaunSessions).forEach(session => {
+                if (session.mathFolder && folders.includes(session.mathFolder)) {
+                    folderCounts[session.mathFolder]++;
+                }
+            });
+
+            const container = document.getElementById('foldersProgress');
+            let html = '';
+
+            folders.forEach(folder => {
+                const count = folderCounts[folder];
+                const progress = Math.min((count / 20) * 100, 100);
+                const mastered = count >= 20;
+
+                html += `
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600;">${folder}</span>
+                            <span style="color: ${mastered ? 'var(--success)' : 'var(--gray-soft)'};">
+                                ${count} / 20 sessions ${mastered ? '✓ Mastered' : ''}
+                            </span>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.1); height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="background: ${mastered ? 'var(--success)' : 'var(--amber-warm)'}; height: 100%; width: ${progress}%; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Handle math folder dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const mathFolderSelect = document.getElementById('mathFolder');
+            const mathFolderOther = document.getElementById('mathFolderOther');
+            
+            if (mathFolderSelect) {
+                mathFolderSelect.addEventListener('change', function() {
+                    if (this.value === 'Other') {
+                        mathFolderOther.style.display = 'block';
+                    } else {
+                        mathFolderOther.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // ==================== MUSIC BOOKING ====================
+
+        function getWeekString(date) {
+            const year = date.getFullYear();
+            const week = getWeekNumber(date);
+            return `${year}-W${week.toString().padStart(2, '0')}`;
+        }
+
+        function getWeekNumber(date) {
+            const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            const dayNum = d.getUTCDay() || 7;
+            d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+            return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+        }
+
+        function loadMusicBookings() {
+            const week = document.getElementById('musicWeek').value;
+            if (!week) return;
+
+            const bookings = musicBookings[week] || [];
+            const list = document.getElementById('musicBookingList');
+
+            if (bookings.length === 0) {
+                list.innerHTML = '<p style="color: var(--gray-soft); text-align: center; padding: 2rem;">No bookings for this week yet.</p>';
+                return;
+            }
+
+            list.innerHTML = bookings.map((booking, index) => `
+                <div class="music-slot-day">
+                    <div>
+                        <span class="music-slot-label">${booking.day}</span> - ${booking.time}
+                        <span class="status-badge ${booking.confirmed ? 'status-booked' : 'status-pending'}" style="margin-left: 1rem;">
+                            ${booking.confirmed ? 'Booked' : 'Pending'}
+                        </span>
+                    </div>
+                    <button class="btn-small btn-secondary" onclick="toggleMusicBooking('${week}', ${index})">
+                        ${booking.confirmed ? 'Unconfirm' : 'Confirm'}
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function addMusicBooking() {
+            const week = document.getElementById('musicWeek').value;
+            if (!week) {
+                alert('Please select a week first');
+                return;
+            }
+
+            const day = prompt('Day (Tuesday/Wednesday/Thursday/Friday):');
+            const time = prompt('Time (e.g. 2:00 PM):');
+            
+            if (day && time) {
+                if (!musicBookings[week]) musicBookings[week] = [];
+                musicBookings[week].push({ day, time, confirmed: false });
+                saveMusicBookings();
+                loadMusicBookings();
+            }
+        }
+
+        function toggleMusicBooking(week, index) {
+            musicBookings[week][index].confirmed = !musicBookings[week][index].confirmed;
+            saveMusicBookings();
+            loadMusicBookings();
+        }
+
+        // ==================== ACTIVITY LIBRARIES ====================
+
+        function loadFitnessLibrary() {
+            const library = document.getElementById('fitnessLibrary');
+            library.innerHTML = FITNESS_ACTIVITIES.map(activity => `
+                <div class="activity-card">
+                    <div class="activity-card-title">${activity.name}</div>
+                    <div class="activity-card-desc">${activity.description}</div>
+                    <div class="activity-card-tags">
+                        <span class="activity-tag">${activity.category}</span>
+                        <span class="activity-tag">${activity.duration}</span>
+                        <span class="activity-tag">${activity.equipment}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadCookingLibrary() {
+            const library = document.getElementById('cookingLibrary');
+            library.innerHTML = COOKING_ACTIVITIES.map(activity => `
+                <div class="activity-card">
+                    <div class="activity-card-title">${activity.name}</div>
+                    <div class="activity-card-desc">${activity.description}</div>
+                    <div class="activity-card-tags">
+                        <span class="activity-tag">${activity.category}</span>
+                        <span class="activity-tag">${activity.duration}</span>
+                        <span class="activity-tag">Skills: ${activity.skills}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadGamesLibrary() {
+            const library = document.getElementById('gamesLibrary');
+            library.innerHTML = GAMES_LIBRARY.map(game => `
+                <div class="activity-card">
+                    <div class="activity-card-title">${game.name}</div>
+                    <div class="activity-card-desc">${game.description}</div>
+                    <div class="activity-card-tags">
+                        <span class="activity-tag">Ages ${game.minAge}-${game.maxAge}</span>
+                        <span class="activity-tag">${game.energy} energy</span>
+                        <span class="activity-tag">${game.location}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== STUDENT DATABASE ====================
+
+        function addStudent() {
+            const student = {
+                id: Date.now(),
+                name: document.getElementById('newStudentName').value.trim(),
+                grade: parseInt(document.getElementById('newStudentGrade').value) || 0,
+                age: parseInt(document.getElementById('newStudentAge').value) || 0,
+                parentName: document.getElementById('newParentName').value.trim(),
+                parentPhone: document.getElementById('newParentPhone').value.trim(),
+                parentEmail: document.getElementById('newParentEmail').value.trim(),
+                parentFacebook: document.getElementById('newParentFacebook').value.trim(),
+                specialAttention: document.getElementById('newStudentSpecial').checked,
+                interests: document.getElementById('newStudentInterests').value.trim(),
+                triggerNotes: document.getElementById('newStudentTriggers').value.trim(),
+                strategies: document.getElementById('newStudentStrategies').value.trim(),
+                medical: document.getElementById('newStudentMedical').value.trim(),
+                notes: document.getElementById('newStudentNotes').value.trim()
+            };
+
+            if (!student.name || !student.grade) {
+                alert('Please fill in required fields: Student Name and Grade');
+                return;
+            }
+
+            students.push(student);
+            saveStudents();
+            clearStudentForm();
+            alert(`${student.name} added successfully!`);
+            
+            // Switch to view tab
+            document.querySelectorAll('.sub-tab')[0].click();
+        }
+
+        function updateStudent(id) {
+            const index = students.findIndex(s => s.id === id);
+            if (index === -1) return;
+
+            students[index] = {
+                id: id,
+                name: document.getElementById('newStudentName').value.trim(),
+                grade: parseInt(document.getElementById('newStudentGrade').value) || 0,
+                age: parseInt(document.getElementById('newStudentAge').value) || 0,
+                parentName: document.getElementById('newParentName').value.trim(),
+                parentPhone: document.getElementById('newParentPhone').value.trim(),
+                parentEmail: document.getElementById('newParentEmail').value.trim(),
+                parentFacebook: document.getElementById('newParentFacebook').value.trim(),
+                specialAttention: document.getElementById('newStudentSpecial').checked,
+                interests: document.getElementById('newStudentInterests').value.trim(),
+                triggerNotes: document.getElementById('newStudentTriggers').value.trim(),
+                strategies: document.getElementById('newStudentStrategies').value.trim(),
+                medical: document.getElementById('newStudentMedical').value.trim(),
+                notes: document.getElementById('newStudentNotes').value.trim()
+            };
+
+            if (!students[index].name || !students[index].grade) {
+                alert('Please fill in required fields: Student Name and Grade');
+                return;
+            }
+
+            saveStudents();
+            clearStudentForm();
+            alert(`${students[index].name} updated successfully!`);
+            
+            // Reset button
+            const submitBtn = document.querySelector('#add-student-section .btn-primary');
+            submitBtn.textContent = 'Add Student to Database';
+            submitBtn.onclick = addStudent;
+            delete window.editingStudentId;
+            
+            // Switch to view tab
+            document.querySelectorAll('.sub-tab')[0].click();
+        }
+
+        function clearStudentForm() {
+            document.getElementById('newStudentName').value = '';
+            document.getElementById('newStudentGrade').value = '';
+            document.getElementById('newStudentAge').value = '';
+            document.getElementById('newParentName').value = '';
+            document.getElementById('newParentPhone').value = '';
+            document.getElementById('newParentEmail').value = '';
+            document.getElementById('newParentFacebook').value = '';
+            document.getElementById('newStudentSpecial').checked = false;
+            document.getElementById('newStudentInterests').value = '';
+            document.getElementById('newStudentTriggers').value = '';
+            document.getElementById('newStudentStrategies').value = '';
+            document.getElementById('newStudentMedical').value = '';
+            document.getElementById('newStudentNotes').value = '';
+        }
+
+        function importClassroomList() {
+            const statusDiv = document.getElementById('importStatus');
+            statusDiv.innerHTML = '<p style="color: var(--amber-warm);">Importing students...</p>';
+
+            const classroomData = [
+                // Kindergarten
+                {name: "Caleb Achneepineskum", grade: 0, parentName: "Kayla Loon", parentPhone: "(807) 697-1611", parentEmail: "kaylachristineloon@hotmail.com"},
+                {name: "Danielle Kakaychewan", grade: 0, parentName: "Hillary Kakaychewan, Dakota", parentPhone: "(807) 356-0708"},
+                {name: "Maddy Wassaykeesic", grade: 0, parentName: "Shanelle Baxter", parentPhone: "(807) 632-2909"},
+                {name: "Neil Aggamaway", grade: 0, parentName: "Nicole Achneepineskum / Patricia Ach", parentPhone: "(807) 631-0879", parentEmail: "PattyAggam21@gmail.com"},
+                {name: "Craig Achneepineskum", grade: 0, parentName: "Chelsea Ach", parentPhone: "(807) 621-0530 / (807) 630-3023"},
+                {name: "Derek Bilodeau", grade: 0, parentName: "Lindsay Achneepineskum / Evelyn Baxter", parentPhone: "(807) 853-1783", parentEmail: "baxterevelyn.21@gmail.com"},
+                {name: "Lashayla Coaster Loon", grade: 0, parentName: "Shannon Coaster / Janet Coaster", parentPhone: "(807) 633-0895"},
+                {name: "Valen Moonias", grade: 0, parentName: "Nicole Achneepineskum / Patricia Ach", parentPhone: "(807) 631-0879"},
+                {name: "Hudson Okeese", grade: 0, parentName: "Adrienne Okeese", parentPhone: "(807) 620-2009"},
+                {name: "Layla Wabano", grade: 0, parentName: "Destiny Baxter", parentPhone: "(807) 621-9200", parentEmail: "dcrbaxter@outlook.com"},
+                {name: "Marshall Moonias", grade: 0, parentName: "", parentPhone: ""},
+                
+                // Grade 1
+                {name: "Colton Loon", grade: 1, parentName: "Kayla Loon", parentPhone: "(807) 697-1611", parentEmail: "kaylachristineloon@hotmail.com"},
+                {name: "Nariyah Megan", grade: 1, parentName: "Darien Megan", parentPhone: "(807) 620-5232", parentEmail: "darienmegan@outlook.com"},
+                {name: "Isaac Kakaychewan", grade: 1, parentName: "Nolan Kakaychewan / Keisha Donio / Cindy Kakaychewan", parentPhone: "(807) 356-5546 / (807) 630-1363"},
+                {name: "Jonathan Kakaychewan", grade: 1, parentName: "", parentPhone: ""},
+                {name: "CJ Wabano", grade: 1, parentName: "Destiny Baxter", parentPhone: "(807) 621-9200", parentEmail: "dcrbaxter@outlook.com"},
+                {name: "Myles Wenjack", grade: 1, parentName: "Andy and Janet Coaster", parentPhone: "(807) 621-9154 / (807) 633-0895"},
+                {name: "Jocelyn Wassaykeesic", grade: 1, parentName: "Shanelle Baxter", parentPhone: "(807) 632-2909"},
+                
+                // Grade 2
+                {name: "Callum Achneepineskum", grade: 2, parentName: "Kayla Loon", parentPhone: "(807) 697-1611", parentEmail: "kaylachristineloon@hotmail.com"},
+                {name: "Eli Coaster JR", grade: 2, parentName: "Chelsea Ach", parentPhone: "(807) 621-0530 / (807) 630-3023", parentEmail: "Chelsepaulina@gmail.com"},
+                {name: "Mary Rae", grade: 2, parentName: "Serena McKay / James Baxter", parentPhone: "(807) 234-2672"},
+                {name: "Lashata Wenjack-Pelletier", grade: 2, parentName: "Peggy Wenjack / Robyn Wenjack", parentPhone: "(807) 627-6025 / (807) 770-2987", parentEmail: "peggzwenjack@gmail.com"},
+                
+                // Grade 3
+                {name: "Vivianne Coaster-Loon", grade: 3, parentName: "Shannon Coaster / Andy and Janet Coaster", parentPhone: "(807) 349-2593 / (807) 621-9154"},
+                {name: "Athylsten Wabano", grade: 3, parentName: "Destiny Baxter", parentPhone: "(807) 621-9200"},
+                {name: "Brody Achneepineskum", grade: 3, parentName: "Pearl Achneepineskum", parentPhone: "(807) 252-9547"},
+                
+                // Grade 4
+                {name: "Janelle Achneepineskum", grade: 4, parentName: "Nicole Ach / Patti Ach", parentPhone: "(807) 631-0879", parentEmail: "nicoleacheneep@hotmail.com"},
+                {name: "MJ Achneepineskum", grade: 4, parentName: "Mitchell Ach", parentPhone: "(807) 633-8664", parentEmail: "mitchellach@gmail.com"},
+                {name: "Everly Coaster", grade: 4, parentName: "Chelsea Ach", parentPhone: "(807) 621-0530 / (807) 630-3023", parentEmail: "Chelsepaulina@gmail.com"},
+                {name: "Gabriella Fisher Achneepineskum", grade: 4, parentName: "Daness Fisher / Bain Achneepineskum", parentPhone: "(807) 627-4604"},
+                {name: "Leah Wenjack-Pelletier", grade: 4, parentName: "Peggy Wenjack", parentPhone: "(807) 627-6025", parentEmail: "peggzwenjack@gmail.com"},
+                {name: "Harry Baxter", grade: 4, parentName: "Irene Baxter / Harry Baxter Sr.", parentPhone: "(807) 631-8556 / (807) 349-2510"},
+                {name: "Jaze Dick", grade: 4, parentName: "Kaia Moonias", parentPhone: "(807) 630-8476"},
+                {name: "Conner Ach-Moonias", grade: 4, parentName: "", parentPhone: ""},
+                
+                // Grade 5
+                {name: "Cyntheria Wabano", grade: 5, parentName: "Destiny Baxter", parentPhone: "(807) 621-9200", parentEmail: "dcrbaxter@outlook.com"},
+                {name: "Avery Achneepineskum", grade: 5, parentName: "Evelyn Baxter", parentPhone: "(807) 853-1783", parentEmail: "baxterevelyn.21@gmail.com"},
+                {name: "Charlee Achneepineskum", grade: 5, parentName: "Pearl Achneepineskum", parentPhone: "(807) 252-9547"},
+                {name: "Lucius Wenjack-Parenteau", grade: 5, parentName: "Annie Wenjack", parentPhone: "(807) 212-4810"},
+                
+                // Grade 6
+                {name: "Ryden Coaster", grade: 6, parentName: "Chelsea Ach", parentPhone: "(807) 621-0530 / (807) 630-3023", parentEmail: "Chelsepaulina@gmail.com"},
+                {name: "Titus Gagnon", grade: 6, parentName: "Susanna Baxter", parentPhone: "(807) 632-8386", parentEmail: "Susanna.baxter@martenfalls.ca"},
+                {name: "Asia Wabano", grade: 6, parentName: "Destiny Baxter", parentPhone: "(807) 621-9200", parentEmail: "dcrbaxter@outlook.com"},
+                {name: "Ramiro Mark", grade: 6, parentName: "Aspasia Mark / Latanya Tate", parentPhone: "(807) 620-5208", parentEmail: "mark_aspasia@hotmail.com"},
+                {name: "Zhake Zhayier", grade: 6, parentName: "Joann Soriano", parentPhone: "(519) 868-4833"},
+                
+                // Grade 7
+                {name: "Beverly Achneepineskum", grade: 7, parentName: "Austin Achneepineskum", parentPhone: ""},
+                {name: "Nellie Achneepineskum", grade: 7, parentName: "Nicole Ach / Patricia Ach", parentPhone: "(807) 632-8163", parentEmail: "nicoleacheneep@hotmail.com"},
+                {name: "Carter Ach-Moonias", grade: 7, parentName: "", parentPhone: ""},
+                {name: "Kaylem Achneepineskum", grade: 7, parentName: "Mitchell Achneepineskum", parentPhone: "(807) 633-8664"},
+                {name: "Scarlett Achneepineskum", grade: 7, parentName: "Pearl", parentPhone: ""},
+                {name: "Brooklyn Baxter-Wassaykeesic", grade: 7, parentName: "Shanelle Baxter", parentPhone: "(807) 632-2909"},
+                {name: "Titan Gagnon", grade: 7, parentName: "Susanna Baxter", parentPhone: "(807) 632-8386", parentEmail: "Susanna.baxter@martenfalls.ca"},
+                {name: "Serenity Metatawabin", grade: 7, parentName: "Stasia Ach", parentPhone: "(807) 627-3373", parentEmail: "stasiaach1@outlook.com"},
+                {name: "Sharlette Wenjack", grade: 7, parentName: "Andy Coaster / Janet Coaster", parentPhone: "(807) 621-9154 / (807) 633-0895"},
+                
+                // Grade 8
+                {name: "Aubrey-Rose Achneepineskum", grade: 8, parentName: "Austin Ach", parentPhone: ""},
+                {name: "Kailyn Achneepineskum", grade: 8, parentName: "Mitchell Achneepineskum", parentPhone: "(807) 633-8664"},
+                {name: "Andrew Coaster-Sinoway", grade: 8, parentName: "Alison Coaster / Andy Coaster / Janet Coaster", parentPhone: "(807) 621-9154 / (807) 633-0895"},
+                {name: "Antwaun Wenjack", grade: 8, parentName: "Andy Coaster / Janet Coaster", parentPhone: "(807) 621-9154 / (807) 633-0895", specialAttention: true, notes: "1-on-1 academic support student"},
+                {name: "Farah Lachinette", grade: 8, parentName: "", parentPhone: ""},
+                {name: "Alayna Meese Aletawageesic", grade: 8, parentName: "Evelyn Baxter", parentPhone: "(807) 853-1783", parentEmail: "baxterevelyn.21@gmail.com"},
+            ];
+
+            let imported = 0;
+            let skipped = 0;
+
+            classroomData.forEach(student => {
+                // Check if student already exists
+                const exists = students.some(s => 
+                    s.name.toLowerCase() === student.name.toLowerCase() && s.grade === student.grade
+                );
+
+                if (!exists && student.name) {
+                    students.push({
+                        id: Date.now() + imported,
+                        name: student.name,
+                        grade: student.grade,
+                        age: 0,
+                        parentName: student.parentName || '',
+                        parentPhone: student.parentPhone || '',
+                        parentEmail: student.parentEmail || '',
+                        parentFacebook: '',
+                        specialAttention: student.specialAttention || false,
+                        interests: '',
+                        triggerNotes: '',
+                        strategies: '',
+                        medical: '',
+                        notes: student.notes || ''
+                    });
+                    imported++;
+                } else {
+                    skipped++;
+                }
+            });
+
+            saveStudents();
+            
+            statusDiv.innerHTML = `
+                <div style="background: rgba(74, 222, 128, 0.2); border: 1px solid var(--success); border-radius: 8px; padding: 1rem;">
+                    <strong style="color: var(--success);">Import Complete!</strong><br>
+                    <span style="color: var(--cream);">✅ Imported: ${imported} students<br>
+                    ⚠️ Skipped: ${skipped} students (already in database)</span>
+                </div>
+            `;
+
+            // Reload list
+            loadStudentsList();
+        }
+
+        function loadStudentsList() {
+            const list = document.getElementById('studentsList');
+            
+            if (students.length === 0) {
+                list.innerHTML = '<p style="color: var(--gray-soft); text-align: center; padding: 2rem;">No students in database yet.</p>';
+                return;
+            }
+
+            list.innerHTML = students.map(student => `
+                <div class="contact-card">
+                    <div class="contact-card-header">
+                        <div>
+                            <div class="contact-name">${student.name}</div>
+                            <div class="contact-grade">Grade ${student.grade}${student.age ? ` • Age ${student.age}` : ''}${student.specialAttention ? ' • ⚠️ Special Attention' : ''}</div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-small btn-secondary" onclick="editStudent(${student.id})">Edit</button>
+                            <button class="delete-btn btn-small" onclick="deleteStudent(${student.id})">Delete</button>
+                        </div>
+                    </div>
+                    <div class="contact-info-grid">
+                        <div class="contact-info-row">
+                            <span class="contact-info-label">Parent/Guardian:</span>
+                            <span class="contact-info-value">${student.parentName || 'Not provided'}</span>
+                        </div>
+                        <div class="contact-info-row">
+                            <span class="contact-info-label">Phone:</span>
+                            <span class="contact-info-value">${student.parentPhone || 'Not provided'}</span>
+                        </div>
+                        ${student.parentEmail ? `
+                            <div class="contact-info-row">
+                                <span class="contact-info-label">Email:</span>
+                                <span class="contact-info-value">${student.parentEmail}</span>
+                            </div>
+                        ` : ''}
+                        ${student.parentFacebook ? `
+                            <div class="contact-info-row">
+                                <span class="contact-info-label">Facebook:</span>
+                                <span class="contact-info-value">${student.parentFacebook}</span>
+                            </div>
+                        ` : ''}
+                        ${student.interests ? `
+                            <div class="contact-info-row" style="grid-column: 1 / -1;">
+                                <span class="contact-info-label">Interests:</span>
+                                <span class="contact-info-value">${student.interests}</span>
+                            </div>
+                        ` : ''}
+                        ${student.triggerNotes ? `
+                            <div class="contact-info-row" style="grid-column: 1 / -1;">
+                                <span class="contact-info-label">Triggers:</span>
+                                <span class="contact-info-value">${student.triggerNotes}</span>
+                            </div>
+                        ` : ''}
+                        ${student.strategies ? `
+                            <div class="contact-info-row" style="grid-column: 1 / -1;">
+                                <span class="contact-info-label">Strategies:</span>
+                                <span class="contact-info-value">${student.strategies}</span>
+                            </div>
+                        ` : ''}
+                        ${student.medical ? `
+                            <div class="contact-info-row" style="grid-column: 1 / -1;">
+                                <span class="contact-info-label">Medical/Dietary:</span>
+                                <span class="contact-info-value">${student.medical}</span>
+                            </div>
+                        ` : ''}
+                        ${student.notes ? `
+                            <div class="contact-info-row" style="grid-column: 1 / -1;">
+                                <span class="contact-info-label">Additional Notes:</span>
+                                <span class="contact-info-value">${student.notes}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editStudent(id) {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+
+            // Switch to add student tab and populate fields
+            document.querySelectorAll('#students-section .sub-tab')[1].click();
+            
+            // Populate form
+            document.getElementById('newStudentName').value = student.name;
+            document.getElementById('newStudentGrade').value = student.grade;
+            document.getElementById('newStudentAge').value = student.age || '';
+            document.getElementById('newParentName').value = student.parentName;
+            document.getElementById('newParentPhone').value = student.parentPhone;
+            document.getElementById('newParentEmail').value = student.parentEmail || '';
+            document.getElementById('newParentFacebook').value = student.parentFacebook || '';
+            document.getElementById('newStudentSpecial').checked = student.specialAttention;
+            document.getElementById('newStudentInterests').value = student.interests || '';
+            document.getElementById('newStudentTriggers').value = student.triggerNotes || '';
+            document.getElementById('newStudentStrategies').value = student.strategies || '';
+            document.getElementById('newStudentMedical').value = student.medical || '';
+            document.getElementById('newStudentNotes').value = student.notes || '';
+            
+            // Store ID for update
+            window.editingStudentId = id;
+            
+            // Change button text
+            const submitBtn = document.querySelector('#add-student-section .btn-primary');
+            submitBtn.textContent = '💾 Update Student';
+            submitBtn.onclick = () => updateStudent(id);
+        }
+
+        function deleteStudent(id) {
+            const student = students.find(s => s.id === id);
+            if (!confirm(`Are you sure you want to delete ${student.name}?`)) {
+                return;
+            }
+
+            students = students.filter(s => s.id !== id);
+            saveStudents();
+            loadStudentsList();
+        }
+
+        // ==================== QUICK PLANNER ====================
+
+        let selectedPlannerStudents = new Set();
+
+        function loadPlannerStudents() {
+            const grid = document.getElementById('plannerStudentGrid');
+            
+            if (students.length === 0) {
+                grid.innerHTML = '<p style="color: var(--gray-soft); padding: 2rem; text-align: center;">No students in database. Add students in the Student Database tab.</p>';
+                return;
+            }
+
+            grid.innerHTML = students.map(student => `
+                <div class="student-card ${student.specialAttention ? 'special-attention' : ''} ${selectedPlannerStudents.has(student.id) ? 'selected' : ''}" 
+                     onclick="togglePlannerStudent(${student.id}, this)">
+                    <div class="student-name">${student.name}</div>
+                    <div class="student-grade">Grade ${student.grade}</div>
+                    ${student.specialAttention ? '<span class="special-badge">NEEDS ATTENTION</span>' : ''}
+                </div>
+            `).join('');
+        }
+
+        function togglePlannerStudent(id, element) {
+            if (selectedPlannerStudents.has(id)) {
+                selectedPlannerStudents.delete(id);
+                element.classList.remove('selected');
+            } else {
+                selectedPlannerStudents.add(id);
+                element.classList.add('selected');
+            }
+        }
+
+        function generateProgramPlan() {
+            if (selectedPlannerStudents.size === 0) {
+                alert('Please select at least one student');
+                return;
+            }
+
+            const vibe = document.querySelector('input[name="plannerVibe"]:checked').value;
+            const arena = document.getElementById('plannerArena').checked;
+            const indoor = document.getElementById('plannerIndoor').checked;
+            const outdoor = document.getElementById('plannerOutdoor').checked;
+
+            // Get selected students details
+            const selectedStudentDetails = students.filter(s => selectedPlannerStudents.has(s.id));
+            const hasSpecialAttention = selectedStudentDetails.some(s => s.specialAttention);
+            const ages = selectedStudentDetails.map(s => s.age).filter(a => a > 0);
+            const minAge = ages.length > 0 ? Math.min(...ages) : 5;
+            const maxAge = ages.length > 0 ? Math.max(...ages) : 14;
+
+            // Generate recommendations
+            const recommendations = {
+                students: selectedStudentDetails.map(s => s.name),
+                ageRange: `${minAge}-${maxAge} years`,
+                games: [],
+                fitness: [],
+                cooking: []
+            };
+
+            // Get appropriate games
+            const suitableGames = GAMES_LIBRARY.filter(game => {
+                let suitable = game.minAge <= maxAge && game.maxAge >= minAge;
+                
+                // Energy filtering
+                if (vibe === 'tense' && game.energy === 'high') suitable = false;
+                if (vibe === 'calm' && game.energy === 'high') suitable = false;
+                
+                // Location filtering
+                if (arena && !game.location.includes('arena')) suitable = false;
+                if (indoor && outdoor) {
+                    // Both available - any location works
+                } else if (indoor && !outdoor) {
+                    if (!game.location.includes('indoor')) suitable = false;
+                } else if (outdoor && !indoor) {
+                    if (!game.location.includes('outdoor')) suitable = false;
+                }
+                
+                // Special attention filtering
+                if (hasSpecialAttention) {
+                    if (game.competition !== 'none' && game.competition !== 'low' && game.competition !== 'team') {
+                        suitable = false;
+                    }
+                }
+                
+                return suitable;
+            });
+
+            recommendations.games = suitableGames.slice(0, 5);
+
+            // Get appropriate fitness activities
+            const suitableFitness = FITNESS_ACTIVITIES.filter(activity => {
+                if (vibe === 'tense' && activity.category === 'Cardio') return false;
+                if (vibe === 'calm' && activity.category === 'Cardio' && activity.name.includes('Running')) return false;
+                if (arena && !activity.name.includes('Arena')) return false;
+                return true;
+            });
+
+            recommendations.fitness = suitableFitness.slice(0, 4);
+
+            // Get appropriate cooking activities
+            const suitableCooking = COOKING_ACTIVITIES.filter(activity => {
+                // Age appropriate
+                if (maxAge < 8 && activity.skills.includes('cooking')) return false;
+                return true;
+            });
+
+            recommendations.cooking = suitableCooking.slice(0, 4);
+
+            // Display recommendations
+            displayProgramPlan(recommendations, hasSpecialAttention, selectedStudentDetails);
+        }
+
+        function displayProgramPlan(recommendations, hasSpecialAttention, students) {
+            const output = document.getElementById('programPlanOutput');
+            
+            let safetyNotes = [];
+            if (hasSpecialAttention) {
+                const specialStudents = students.filter(s => s.specialAttention);
+                specialStudents.forEach(student => {
+                    safetyNotes.push(`⚠️ ${student.name}: ${student.strategies || 'Needs special attention'}`);
+                });
+            }
+
+            const html = `
+                <div style="background: linear-gradient(135deg, rgba(255, 167, 38, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); padding: 2rem; border-radius: 16px; border: 2px solid var(--amber-warm); margin-top: 2rem;">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h2 style="font-size: 2rem; color: var(--amber-warm); margin-bottom: 0.5rem;">🎯 Your Personalized Program Plan</h2>
+                        <p style="font-size: 1.1rem; color: var(--gray-soft);">
+                            For ${recommendations.students.length} student${recommendations.students.length > 1 ? 's' : ''} • Ages ${recommendations.ageRange}
+                        </p>
+                    </div>
+
+                    ${safetyNotes.length > 0 ? `
+                        <div style="background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                                <span style="font-size: 2rem;">🚨</span>
+                                <h3 style="font-size: 1.3rem; color: #ef4444; margin: 0;">Safety Notes - Special Attention Students</h3>
+                            </div>
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                ${safetyNotes.map(note => `<li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(239, 68, 68, 0.2); color: var(--cream);">${note}</li>`).join('')}
+                                <li style="padding: 0.5rem 0; color: var(--cream);">💡 Use low-competition, cooperative activities</li>
+                                <li style="padding: 0.5rem 0; color: var(--cream);">💡 Team students vs staff when possible</li>
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    <!-- Games Section -->
+                    <div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(251, 191, 36, 0.2)); border-left: 4px solid #fbbf24; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                            <span style="font-size: 2.5rem;">🎮</span>
+                            <h3 style="font-size: 1.5rem; color: #fbbf24; margin: 0;">Recommended Games (${recommendations.games.length})</h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                            ${recommendations.games.map(game => `
+                                <div style="background: rgba(255, 255, 255, 0.05); padding: 1.25rem; border-radius: 10px; border: 1px solid rgba(251, 191, 36, 0.3); transition: all 0.3s ease;">
+                                    <div style="font-size: 1.2rem; font-weight: 700; color: #fbbf24; margin-bottom: 0.5rem;">${game.name}</div>
+                                    <div style="font-size: 0.9rem; color: var(--gray-soft); margin-bottom: 0.75rem; line-height: 1.4;">${game.description}</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem;">
+                                        <span style="background: rgba(251, 191, 36, 0.2); padding: 0.25rem 0.6rem; border-radius: 12px; color: #fbbf24;">Ages ${game.minAge}-${game.maxAge}</span>
+                                        <span style="background: rgba(251, 191, 36, 0.2); padding: 0.25rem 0.6rem; border-radius: 12px; color: #fbbf24;">${game.energy} energy</span>
+                                        <span style="background: rgba(251, 191, 36, 0.2); padding: 0.25rem 0.6rem; border-radius: 12px; color: #fbbf24;">${game.location}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Fitness Section -->
+                    <div style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.2)); border-left: 4px solid #f97316; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                            <span style="font-size: 2.5rem;">💪</span>
+                            <h3 style="font-size: 1.5rem; color: #f97316; margin: 0;">Fitness Activities (${recommendations.fitness.length})</h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                            ${recommendations.fitness.map(activity => `
+                                <div style="background: rgba(255, 255, 255, 0.05); padding: 1.25rem; border-radius: 10px; border: 1px solid rgba(249, 115, 22, 0.3);">
+                                    <div style="font-size: 1.2rem; font-weight: 700; color: #f97316; margin-bottom: 0.5rem;">${activity.name}</div>
+                                    <div style="font-size: 0.9rem; color: var(--gray-soft); margin-bottom: 0.75rem; line-height: 1.4;">${activity.description}</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem;">
+                                        <span style="background: rgba(249, 115, 22, 0.2); padding: 0.25rem 0.6rem; border-radius: 12px; color: #f97316;">${activity.category}</span>
+                                        <span style="background: rgba(249, 115, 22, 0.2); padding: 0.25rem 0.6rem; border-radius: 12px; color: #f97316;">${activity.duration}</span>
+                                        <span style="background: rgba(249, 115, 22, 0.2); padding: 0.25rem 0.6rem; border-radius: 12px; color: #f97316;">${activity.equipment}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Cooking Section -->
+                    <div style="background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(167, 139, 250, 0.2)); border-left: 4px solid #a78bfa; padding: 1.5rem; border-radius: 12px;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                            <span style="font-size: 2.5rem;">🍳</span>
+                            <h3 style="font-size: 1.5rem; color: #a78bfa; margin: 0;">Cooking Activities (${recommendations.cooking.length})</h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                            ${recommendations.cooking.map(activity => `
+                                <div style="background: rgba(255, 255, 255, 0.05); padding: 1.25rem; border-radius: 10px; border: 1px solid rgba(167, 139, 250, 0.3);">
+                                    <div style="font-size: 1.2rem; font-weight: 700; color: #a78bfa; margin-bottom: 0.5rem;">${activity.name}</div>
+                                    <div style="font-size: 0.9rem; color: var(--gray-soft); margin-bottom: 0.75rem; line-height: 1.4;">${activity.description}</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem;">
+                                        <span style="background: rgba(167, 139, 250, 0.2); padding: 0.25rem 0.6rem; border-radius: 12px; color: #a78bfa;">${activity.duration}</span>
+                                        <span style="background: rgba(167, 139, 250, 0.2); padding: 0.25rem 0.6rem; border-radius: 12px; color: #a78bfa;">${activity.skills}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 12px; border: 1px solid #10b981;">
+                        <p style="color: #10b981; font-size: 1.1rem; margin: 0;">
+                            ✅ Plan generated successfully! Mix and match these activities throughout your program.
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            output.innerHTML = html;
+            output.style.display = 'block';
+            output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
