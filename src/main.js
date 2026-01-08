@@ -37,6 +37,8 @@ import { Arena, addArenaStyles } from './components/arena/Arena.js';
 import { addButtonStyles } from './components/shared/Button.js';
 import { addCardStyles } from './components/shared/Card.js';
 import { addModalStyles } from './components/shared/Modal.js';
+import { addValidationStyles } from './utils/validation.js';
+import { errorHandler } from './utils/errorHandler.js';
 
 // Component instances
 let calendarComponent = null;
@@ -209,6 +211,7 @@ function initializeRouter() {
   addButtonStyles();
   addCardStyles();
   addModalStyles();
+  addValidationStyles();
   addInteractiveCalendarStyles();
   addStudentListStyles();
   addAntwaunDashboardStyles();

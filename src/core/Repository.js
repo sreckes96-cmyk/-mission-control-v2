@@ -4,6 +4,8 @@
  */
 
 import { loadFromStorage, saveToStorage, removeFromStorage } from './Storage.js';
+import { AppError, ErrorType, ErrorSeverity, errorHandler } from '../utils/errorHandler.js';
+import { Validator } from '../utils/validation.js';
 
 export class Repository {
   /**
@@ -13,6 +15,7 @@ export class Repository {
   constructor(storageKey, schema = null) {
     this.storageKey = storageKey;
     this.schema = schema;
+    this.validator = schema ? new Validator(schema) : null;
     this.cache = null;
     this.cacheTime = 0;
     this.cacheDuration = 5000; // 5 seconds
@@ -39,7 +42,15 @@ export class Repository {
 
       return [...items];
     } catch (error) {
-      console.error(`Failed to load ${this.storageKey}:`, error);
+      errorHandler.handleError(
+        new AppError(
+          `Failed to load ${this.storageKey}`,
+          ErrorType.STORAGE,
+          ErrorSeverity.MEDIUM,
+          { storageKey: this.storageKey, originalError: error }
+        ),
+        { operation: 'getAll', repository: this.constructor.name }
+      );
       return [];
     }
   }
@@ -82,7 +93,12 @@ export class Repository {
   save(items) {
     try {
       if (!Array.isArray(items)) {
-        throw new Error('Data must be an array');
+        throw new AppError(
+          'Data must be an array',
+          ErrorType.DATA_INTEGRITY,
+          ErrorSeverity.HIGH,
+          { storageKey: this.storageKey }
+        );
       }
 
       const validated = this.validateAll(items);
@@ -92,11 +108,26 @@ export class Repository {
         // Update cache
         this.cache = validated;
         this.cacheTime = Date.now();
+      } else {
+        throw new AppError(
+          `Failed to save ${this.storageKey}`,
+          ErrorType.STORAGE,
+          ErrorSeverity.HIGH,
+          { storageKey: this.storageKey, itemCount: items.length }
+        );
       }
 
       return success;
     } catch (error) {
-      console.error(`Failed to save ${this.storageKey}:`, error);
+      errorHandler.handleError(
+        error instanceof AppError ? error : new AppError(
+          `Failed to save ${this.storageKey}: ${error.message}`,
+          ErrorType.STORAGE,
+          ErrorSeverity.HIGH,
+          { storageKey: this.storageKey, originalError: error }
+        ),
+        { operation: 'save', repository: this.constructor.name, data: items }
+      );
       throw error;
     }
   }
@@ -276,75 +307,33 @@ export class Repository {
    * @returns {Object} Validated item
    */
   validate(item) {
-    if (!this.schema) return item;
+    if (!this.validator) return item;
 
-    const validated = {};
-    const errors = [];
+    try {
+      const result = this.validator.validate(item);
 
-    for (const [key, rules] of Object.entries(this.schema)) {
-      const value = item[key];
-
-      // Required check
-      if (rules.required && (value === undefined || value === null || value === '')) {
-        errors.push(`${key} is required`);
-        continue;
+      if (!result.isValid) {
+        const errorMessages = this.validator.getAllErrors();
+        throw new AppError(
+          `Validation failed: ${errorMessages.join(', ')}`,
+          ErrorType.VALIDATION,
+          ErrorSeverity.MEDIUM,
+          { errors: result.errors, item }
+        );
       }
 
-      // Skip validation if value is undefined/null and not required
-      if (value === undefined || value === null) {
-        validated[key] = rules.default !== undefined ? rules.default : value;
-        continue;
+      return result.data;
+    } catch (error) {
+      if (error instanceof AppError) {
+        throw error;
       }
-
-      // Type check
-      if (rules.type && typeof value !== rules.type) {
-        errors.push(`${key} must be ${rules.type}`);
-        continue;
-      }
-
-      // String validations
-      if (rules.type === 'string') {
-        if (rules.minLength && value.length < rules.minLength) {
-          errors.push(`${key} must be at least ${rules.minLength} characters`);
-        }
-        if (rules.maxLength && value.length > rules.maxLength) {
-          errors.push(`${key} must be at most ${rules.maxLength} characters`);
-        }
-        if (rules.pattern && !rules.pattern.test(value)) {
-          errors.push(`${key} format is invalid`);
-        }
-      }
-
-      // Number validations
-      if (rules.type === 'number') {
-        if (rules.min !== undefined && value < rules.min) {
-          errors.push(`${key} must be at least ${rules.min}`);
-        }
-        if (rules.max !== undefined && value > rules.max) {
-          errors.push(`${key} must be at most ${rules.max}`);
-        }
-      }
-
-      // Array validations
-      if (rules.type === 'array') {
-        if (!Array.isArray(value)) {
-          errors.push(`${key} must be an array`);
-        }
-      }
-
-      // Custom validation
-      if (rules.validate && !rules.validate(value)) {
-        errors.push(`${key} validation failed`);
-      }
-
-      validated[key] = value;
+      throw new AppError(
+        `Validation error: ${error.message}`,
+        ErrorType.VALIDATION,
+        ErrorSeverity.MEDIUM,
+        { originalError: error, item }
+      );
     }
-
-    if (errors.length > 0) {
-      throw new Error(`Validation errors: ${errors.join(', ')}`);
-    }
-
-    return validated;
   }
 
   /**
