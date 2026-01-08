@@ -23,6 +23,9 @@ import { musicBookingRepository } from './data/MusicBookingRepository.js';
 // Import activity libraries
 import { FITNESS_ACTIVITIES, COOKING_ACTIVITIES, GAMES_LIBRARY } from './data/activities.js';
 
+// Import student data utilities
+import { importStudents, getImportSummary, verifyImport } from './utils/importStudents.js';
+
 // Import components
 import { CalendarView, addCalendarStyles } from './components/calendar/CalendarView.js';
 import { StudentList, addStudentListStyles } from './components/students/StudentList.js';
@@ -407,11 +410,21 @@ if (APP_CONFIG.debug) {
       sessions: antwaunSessionRepository,
       music: musicBookingRepository,
     },
+    utils: {
+      importStudents,
+      getImportSummary,
+      verifyImport,
+    },
     version: APP_CONFIG.version,
   };
 
   console.log('🚀 Mission Control v2.0 Debug Mode');
   console.log('Access app via window.MissionControl');
+  console.log('');
+  console.log('📚 To import student data:');
+  console.log('  MissionControl.utils.importStudents()');
+  console.log('  MissionControl.utils.getImportSummary()');
+  console.log('  MissionControl.utils.verifyImport()');
 }
 
 // Initialize app when DOM is ready
