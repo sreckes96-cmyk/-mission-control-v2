@@ -33,6 +33,7 @@ import { AntwaunDashboard, addAntwaunDashboardStyles } from './components/antwau
 import { QuickPlanner, addQuickPlannerStyles } from './components/planner/QuickPlanner.js';
 import { ActivitiesLibrary, addActivitiesLibraryStyles } from './components/activities/ActivitiesLibrary.js';
 import { MusicCoordination, addMusicCoordinationStyles } from './components/music/MusicCoordination.js';
+import { Arena, addArenaStyles } from './components/arena/Arena.js';
 import { addButtonStyles } from './components/shared/Button.js';
 import { addCardStyles } from './components/shared/Card.js';
 import { addModalStyles } from './components/shared/Modal.js';
@@ -44,6 +45,7 @@ let antwaunComponent = null;
 let plannerComponent = null;
 let activitiesComponent = null;
 let musicComponent = null;
+let arenaComponent = null;
 
 /**
  * Application Configuration
@@ -213,6 +215,7 @@ function initializeRouter() {
   addQuickPlannerStyles();
   addActivitiesLibraryStyles();
   addMusicCoordinationStyles();
+  addArenaStyles();
 
   // Register routes
   router
@@ -290,6 +293,18 @@ function initializeRouter() {
           musicComponent.render();
         }
       },
+    })
+    .register('arena', {
+      onEnter: async () => {
+        logger.info('Navigating to Arena');
+        const container = document.querySelector('#arena-section .card');
+        if (container) {
+          if (!arenaComponent) {
+            arenaComponent = new Arena(container, { store });
+          }
+          arenaComponent.render();
+        }
+      },
     });
 
   // Add before/after change hooks
@@ -307,6 +322,7 @@ function initializeRouter() {
       planner: 'Quick Planner',
       activities: 'Activities Library',
       music: 'Music Coordination',
+      arena: 'Arena - Hockey & Skating',
     };
 
     document.title = `${titles[to] || 'Mission Control'} - Mission Control v2.0`;
