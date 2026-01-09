@@ -29,6 +29,7 @@ import { importStudents, getImportSummary, verifyImport } from './utils/importSt
 // Import components
 import { InteractiveCalendar, addInteractiveCalendarStyles } from './components/calendar/InteractiveCalendar.js';
 import { StudentList, addStudentListStyles } from './components/students/StudentList.js';
+import { addStudentProfileModalStyles } from './components/students/StudentProfileModal.js';
 import { AntwaunDashboard, addAntwaunDashboardStyles } from './components/antwaun/AntwaunDashboard.js';
 import { QuickPlanner, addQuickPlannerStyles } from './components/planner/QuickPlanner.js';
 import { ActivitiesLibrary, addActivitiesLibraryStyles } from './components/activities/ActivitiesLibrary.js';
@@ -218,6 +219,7 @@ function initializeRouter() {
   addValidationStyles();
   addInteractiveCalendarStyles();
   addStudentListStyles();
+  addStudentProfileModalStyles();
   addAntwaunDashboardStyles();
   addQuickPlannerStyles();
   addActivitiesLibraryStyles();

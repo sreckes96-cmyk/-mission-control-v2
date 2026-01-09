@@ -8,6 +8,7 @@ import { studentRepository } from '../../data/StudentRepository.js';
 import { logger } from '../../utils/logger.js';
 import { sanitize } from '../../utils/validators.js';
 import { debounce } from '../../utils/helpers.js';
+import { StudentProfileModal } from './StudentProfileModal.js';
 
 export class StudentList extends Component {
   constructor(container, props = {}) {
@@ -19,17 +20,21 @@ export class StudentList extends Component {
       searchQuery: '',
       filterGrade: 'all',
       sortBy: 'name',
+      showProfileModal: false,
+      selectedStudent: null,
+      isEditing: false,
     };
 
     // Debounced search
     this.debouncedSearch = debounce((query) => this.performSearch(query), 300);
+    this.profileModal = null;
   }
 
   /**
    * Component template
    */
   template() {
-    const { filteredStudents, searchQuery, filterGrade } = this.state;
+    const { filteredStudents, searchQuery, filterGrade, showProfileModal, selectedStudent, isEditing } = this.state;
 
     return `
       <div class="student-list-view">
@@ -68,6 +73,8 @@ export class StudentList extends Component {
         <div class="student-grid">
           ${filteredStudents.length > 0 ? filteredStudents.map((student) => this.renderStudentCard(student)).join('') : this.renderEmptyState()}
         </div>
+
+        <div id="profile-modal-container"></div>
       </div>
     `;
   }
@@ -253,8 +260,7 @@ export class StudentList extends Component {
     const student = studentRepository.getById(id);
     if (student) {
       logger.info(`Viewing student: ${student.name}`);
-      alert(`View details for ${student.name}`);
-      // TODO: Open student details modal
+      this.openProfileModal(student, false);
     }
   }
 
@@ -265,8 +271,52 @@ export class StudentList extends Component {
     const student = studentRepository.getById(id);
     if (student) {
       logger.info(`Editing student: ${student.name}`);
-      alert(`Edit form for ${student.name}`);
-      // TODO: Open edit student modal/form
+      this.openProfileModal(student, true);
+    }
+  }
+
+  /**
+   * Open student profile modal
+   */
+  openProfileModal(student, isEditing = false) {
+    const modalContainer = this.$('#profile-modal-container');
+    if (!modalContainer) return;
+
+    // Create and mount profile modal
+    this.profileModal = new StudentProfileModal(modalContainer, {
+      student,
+      isEditing,
+      onClose: () => this.closeProfileModal(),
+      onSave: (updatedStudent) => this.handleSaveStudent(updatedStudent),
+    });
+    this.profileModal.render();
+  }
+
+  /**
+   * Close profile modal
+   */
+  closeProfileModal() {
+    if (this.profileModal) {
+      this.profileModal.destroy();
+      this.profileModal = null;
+    }
+    const modalContainer = this.$('#profile-modal-container');
+    if (modalContainer) {
+      modalContainer.innerHTML = '';
+    }
+  }
+
+  /**
+   * Handle save student from modal
+   */
+  handleSaveStudent(updatedStudent) {
+    try {
+      studentRepository.update(updatedStudent.id, updatedStudent);
+      logger.success(`Updated ${updatedStudent.name}`);
+      this.loadStudents();
+      this.closeProfileModal();
+    } catch (error) {
+      logger.error('Failed to save student', error);
     }
   }
 
