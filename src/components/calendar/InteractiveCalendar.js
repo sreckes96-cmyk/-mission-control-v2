@@ -129,10 +129,6 @@ export class InteractiveCalendar extends Component {
         </div>
 
         <div class="calendar-body">
-          <div class="activity-palette">
-            ${this.renderActivityPalette()}
-          </div>
-
           <div class="schedule-grid">
             ${this.renderScheduleGrid(timeSlots, activities)}
           </div>
@@ -342,24 +338,9 @@ export class InteractiveCalendar extends Component {
     if (todayBtn) todayBtn.addEventListener('click', () => this.goToToday());
     if (datePicker) datePicker.addEventListener('change', (e) => this.setDate(e.target.value));
 
-    // Activity palette drag events
-    const paletteItems = this.$$('.palette-item');
-    paletteItems.forEach(item => {
-      item.addEventListener('dragstart', (e) => this.handleDragStart(e));
-      item.addEventListener('click', () => {
-        logger.info(`Selected ${item.dataset.categoryId} - click on a time slot to add`);
-        // Highlight time slots
-        this.$$('.slot-content').forEach(slot => slot.classList.add('drop-ready'));
-      });
-    });
-
-    // Time slot drop events
+    // Time slot click events
     const slotContents = this.$$('.slot-content');
     slotContents.forEach(slot => {
-      slot.addEventListener('dragover', (e) => this.handleDragOver(e));
-      slot.addEventListener('dragenter', (e) => this.handleDragEnter(e));
-      slot.addEventListener('dragleave', (e) => this.handleDragLeave(e));
-      slot.addEventListener('drop', (e) => this.handleDrop(e));
       slot.addEventListener('click', (e) => {
         const startTime = slot.dataset.slotStart;
         this.openActivityPicker({ start: startTime });
@@ -581,13 +562,11 @@ export class InteractiveCalendar extends Component {
     const isSelected = selectedStudents.includes(studentId);
 
     if (isSelected) {
-      this.setState({
-        selectedStudents: selectedStudents.filter(id => id !== studentId),
-      });
+      // Update state without triggering render
+      this.state.selectedStudents = selectedStudents.filter(id => id !== studentId);
     } else {
-      this.setState({
-        selectedStudents: [...selectedStudents, studentId],
-      });
+      // Update state without triggering render
+      this.state.selectedStudents = [...selectedStudents, studentId];
     }
   }
 
@@ -599,10 +578,9 @@ export class InteractiveCalendar extends Component {
         )
       : allStudents;
 
-    this.setState({
-      studentSearch: searchTerm,
-      filteredStudents: filtered,
-    });
+    // Update state without triggering render
+    this.state.studentSearch = searchTerm;
+    this.state.filteredStudents = filtered;
   }
 
   renderStudentSelector() {
@@ -788,9 +766,6 @@ export function addInteractiveCalendarStyles() {
     }
 
     .calendar-body {
-      display: grid;
-      grid-template-columns: 250px 1fr;
-      gap: 1.5rem;
       height: calc(100vh - 250px);
     }
 
