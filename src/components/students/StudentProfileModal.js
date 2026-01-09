@@ -528,9 +528,10 @@ export function addStudentProfileModalStyles() {
     .student-profile-modal {
       width: 90%;
       max-width: 800px;
-      max-height: 90vh;
+      max-height: 85vh;
       display: flex;
       flex-direction: column;
+      margin: auto;
     }
 
     .profile-header {
