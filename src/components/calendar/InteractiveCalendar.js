@@ -1098,13 +1098,13 @@ export function addInteractiveCalendarStyles() {
 
     /* Activity Picker Modal */
     .activity-picker-modal {
-      width: 90%;
-      max-width: 600px;
-      max-height: 90vh;
+      width: 85%;
+      max-width: 500px;
+      max-height: 85vh;
     }
 
     .activity-picker-modal .modal-body {
-      max-height: calc(90vh - 200px);
+      max-height: calc(85vh - 200px);
       overflow-y: auto;
     }
 
