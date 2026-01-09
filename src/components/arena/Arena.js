@@ -1048,17 +1048,40 @@ export class Arena extends Component {
    * Load students on mount
    */
   loadStudents() {
-    const students = studentRepository.getAllSorted();
+    // Try to get from store first, fallback to repository
+    let students = [];
+
+    if (this.props.store) {
+      students = this.props.store.get('students') || [];
+      logger.info(`Loaded ${students.length} students from store`);
+    }
+
+    if (students.length === 0) {
+      students = studentRepository.getAllSorted();
+      logger.info(`Loaded ${students.length} students from repository`);
+    }
+
+    if (students.length === 0) {
+      logger.warn('No students found in store or repository');
+    }
+
     students.forEach(s => this.initializeStudentProgress(s));
 
     this.setState({ allStudents: students });
     this.filterStudents(); // Apply filter after loading
-
-    logger.info(`Loaded ${students.length} students for Arena`);
   }
 
   onMount() {
     this.loadStudents();
+
+    // Subscribe to student updates from store
+    if (this.props.store) {
+      this.props.store.subscribe('students', () => {
+        logger.info('Students updated in store, reloading Arena');
+        this.loadStudents();
+      });
+    }
+
     logger.info('Arena component mounted');
   }
 }
