@@ -6,6 +6,11 @@
 export function addModalStyles() {
   const style = document.createElement('style');
   style.textContent = `
+    /* Lock body scroll when modal is open */
+    body.modal-open {
+      overflow: hidden;
+    }
+
     /* Modal Overlay */
     .modal-overlay {
       position: fixed;
@@ -21,6 +26,7 @@ export function addModalStyles() {
       z-index: 1000;
       padding: 2rem;
       animation: fadeIn 0.2s ease;
+      overflow-y: auto;
     }
 
     @keyframes fadeIn {

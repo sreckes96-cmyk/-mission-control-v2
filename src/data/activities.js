@@ -1,11 +1,11 @@
 /**
  * Activity Libraries
- * Comprehensive collections of fitness, cooking, and games activities
+ * Comprehensive collections of fitness, cooking, and games activities with tag system
  */
 
 /**
  * Fitness Activities Library
- * Research-based fitness activities with detailed instructions
+ * Research-based fitness activities with detailed instructions and tags
  */
 export const FITNESS_ACTIVITIES = [
   {
@@ -15,6 +15,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Cardio',
     duration: '30-60 sec',
     equipment: 'None',
+    tags: ['physical', 'high-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'High Knees',
@@ -23,6 +24,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Cardio',
     duration: '30-60 sec',
     equipment: 'None',
+    tags: ['physical', 'high-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Butt Kicks',
@@ -31,6 +33,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Cardio',
     duration: '30-60 sec',
     equipment: 'None',
+    tags: ['physical', 'high-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'March in Place',
@@ -39,6 +42,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Cardio',
     duration: '1-2 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Arm Circles',
@@ -47,6 +51,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Warm-up',
     duration: '40 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Shoulder Rolls',
@@ -55,6 +60,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Warm-up',
     duration: '1-2 min',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Neck Stretches',
@@ -63,6 +69,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Stretching',
     duration: '1-2 min',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Bodyweight Squats',
@@ -71,6 +78,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Strength',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Forward Lunges',
@@ -79,6 +87,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Strength',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Calf Raises',
@@ -87,6 +96,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Strength',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Knee Push-Ups',
@@ -95,6 +105,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Strength',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Plank',
@@ -103,6 +114,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '20-30 sec',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Side Plank',
@@ -111,6 +123,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '30-40 sec',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Superman',
@@ -119,6 +132,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Bird Dog',
@@ -127,6 +141,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Crunches',
@@ -135,6 +150,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Bicycle Crunches',
@@ -143,6 +159,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Leg Raises',
@@ -151,6 +168,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Mountain Climbers',
@@ -159,6 +177,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Cardio',
     duration: '30-45 sec',
     equipment: 'None',
+    tags: ['physical', 'high-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Modified Burpees',
@@ -167,6 +186,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Full Body',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'high-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Imaginary Jump Rope',
@@ -175,6 +195,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Cardio',
     duration: '1-2 min',
     equipment: 'None',
+    tags: ['physical', 'high-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Shadow Boxing',
@@ -183,6 +204,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Cardio',
     duration: '30-60 sec',
     equipment: 'None',
+    tags: ['physical', 'high-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Downward Dog',
@@ -191,6 +213,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Yoga',
     duration: '20-30 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Cat-Cow Pose',
@@ -199,6 +222,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Yoga',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: "Child's Pose",
@@ -207,6 +231,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Yoga',
     duration: '20-30 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Warrior Pose',
@@ -215,6 +240,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Yoga',
     duration: '30-40 sec',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Tree Pose',
@@ -223,6 +249,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Yoga',
     duration: '30-40 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Bridge Pose',
@@ -231,6 +258,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Yoga',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Cobra Pose',
@@ -239,6 +267,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Yoga',
     duration: '10-15 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Seated Forward Bend',
@@ -247,6 +276,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Stretching',
     duration: '20-30 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Butterfly Stretch',
@@ -255,6 +285,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Stretching',
     duration: '20-30 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Quad Stretch',
@@ -263,6 +294,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Stretching',
     duration: '30-40 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Hamstring Stretch',
@@ -271,6 +303,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Stretching',
     duration: '30-40 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Calf Stretch',
@@ -279,6 +312,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Stretching',
     duration: '30-40 sec',
     equipment: 'None',
+    tags: ['physical', 'low-energy', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Torso Twists',
@@ -287,6 +321,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Warm-up',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Wall Sit (Invisible Chair)',
@@ -295,6 +330,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Strength',
     duration: '20-30 sec',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Russian Twists',
@@ -303,6 +339,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size'],
   },
   {
     name: 'Heel Touches',
@@ -311,6 +348,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Flutter Kicks',
@@ -319,6 +357,7 @@ export const FITNESS_ACTIVITIES = [
     category: 'Core',
     duration: '20-30 sec',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
   {
     name: 'Donkey Kicks',
@@ -327,12 +366,13 @@ export const FITNESS_ACTIVITIES = [
     category: 'Strength',
     duration: '2-3 min',
     equipment: 'None',
+    tags: ['physical', 'moderate', 'non-competitive', 'individual', 'hands-on', 'indoor', 'minimal-equipment', 'flexible-size', 'quiet'],
   },
 ];
 
 /**
  * Cooking Activities Library
- * Age-appropriate cooking activities with skill development focus
+ * Age-appropriate cooking activities with skill development focus and tags
  */
 export const COOKING_ACTIVITIES = [
   {
@@ -342,6 +382,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Main Dish',
     duration: '30-40 min',
     skills: 'Spreading, measuring, oven use',
+    tags: ['cooking', 'low-energy', 'non-competitive', 'small-group', 'hands-on', 'creative', 'indoor', 'equipment-heavy', 'messy'],
   },
   {
     name: 'Fruit Kebabs',
@@ -350,6 +391,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Snack',
     duration: '20-25 min',
     skills: 'Cutting, arranging',
+    tags: ['cooking', 'low-energy', 'non-competitive', 'small-group', 'hands-on', 'creative', 'indoor', 'minimal-equipment'],
   },
   {
     name: 'Trail Mix',
@@ -358,6 +400,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Snack',
     duration: '15-20 min',
     skills: 'Measuring, mixing',
+    tags: ['cooking', 'low-energy', 'non-competitive', 'flexible-size', 'hands-on', 'indoor', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Smoothie Bowls',
@@ -366,6 +409,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Breakfast',
     duration: '15-20 min',
     skills: 'Blending, measuring',
+    tags: ['cooking', 'low-energy', 'non-competitive', 'small-group', 'hands-on', 'indoor', 'equipment-heavy', 'messy'],
   },
   {
     name: 'Veggie Wraps',
@@ -374,6 +418,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Main Dish',
     duration: '20-25 min',
     skills: 'Spreading, rolling',
+    tags: ['cooking', 'low-energy', 'non-competitive', 'small-group', 'hands-on', 'indoor', 'minimal-equipment'],
   },
   {
     name: 'Energy Balls',
@@ -382,6 +427,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Snack',
     duration: '25-30 min',
     skills: 'Mixing, rolling',
+    tags: ['cooking', 'low-energy', 'non-competitive', 'small-group', 'hands-on', 'indoor', 'minimal-equipment', 'messy'],
   },
   {
     name: 'Pancakes',
@@ -390,6 +436,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Breakfast',
     duration: '30-35 min',
     skills: 'Measuring, mixing, cooking',
+    tags: ['cooking', 'moderate', 'non-competitive', 'small-group', 'hands-on', 'structured', 'indoor', 'equipment-heavy', 'messy'],
   },
   {
     name: 'Quesadillas',
@@ -398,6 +445,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Main Dish',
     duration: '20-25 min',
     skills: 'Assembling, cooking',
+    tags: ['cooking', 'moderate', 'non-competitive', 'small-group', 'hands-on', 'indoor', 'equipment-heavy'],
   },
   {
     name: 'Yogurt Parfaits',
@@ -405,6 +453,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Snack',
     duration: '15-20 min',
     skills: 'Layering, measuring',
+    tags: ['cooking', 'low-energy', 'non-competitive', 'flexible-size', 'hands-on', 'creative', 'indoor', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Grilled Cheese',
@@ -412,6 +461,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Main Dish',
     duration: '20-25 min',
     skills: 'Spreading, grilling',
+    tags: ['cooking', 'moderate', 'non-competitive', 'small-group', 'hands-on', 'indoor', 'equipment-heavy'],
   },
   {
     name: 'Fruit Salad',
@@ -419,6 +469,7 @@ export const COOKING_ACTIVITIES = [
     category: 'Snack',
     duration: '25-30 min',
     skills: 'Cutting, mixing',
+    tags: ['cooking', 'low-energy', 'non-competitive', 'medium-group', 'hands-on', 'indoor', 'minimal-equipment', 'messy'],
   },
   {
     name: 'Tomato Soup',
@@ -426,12 +477,13 @@ export const COOKING_ACTIVITIES = [
     category: 'Main Dish',
     duration: '30-35 min',
     skills: 'Chopping, cooking, stirring',
+    tags: ['cooking', 'moderate', 'cooperative', 'small-group', 'hands-on', 'structured', 'indoor', 'equipment-heavy', 'messy'],
   },
 ];
 
 /**
  * Games Library
- * Comprehensive collection of games with age appropriateness and energy levels
+ * Comprehensive collection of games with age appropriateness, energy levels, and tags
  */
 export const GAMES_LIBRARY = [
   // Tag Games
@@ -444,6 +496,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'large-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Manhunt',
@@ -454,6 +507,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'medium',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'large-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Line Tag',
@@ -464,6 +518,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'medium',
     location: 'indoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'gym-required', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Freeze Tag',
@@ -474,6 +529,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'flexible-size', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Tunnel Tag',
@@ -483,6 +539,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Blob Tag',
@@ -493,6 +550,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'team',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Band-Aid Tag',
@@ -503,6 +561,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'medium',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Elbow Tag',
@@ -513,6 +572,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'non-competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Turtle Tag',
@@ -523,6 +583,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'cooperative', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment'],
   },
   {
     name: 'Toilet Tag',
@@ -533,6 +594,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Skunk Tag',
@@ -543,6 +605,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'medium',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Dead Ant Tag',
@@ -552,6 +615,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'large-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Hot Dog Tag',
@@ -561,6 +625,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Link Tag',
@@ -570,6 +635,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'team',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Revenge Tag',
@@ -579,6 +645,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'medium',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Mission Impossible Tag',
@@ -588,6 +655,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'high',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
 
   // Classic Games
@@ -600,6 +668,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'non-competitive', 'flexible-size', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Capture the Flag',
@@ -610,6 +679,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'team',
     location: 'outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'large-group', 'social', 'hands-on', 'outdoor', 'weather-dependent', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Duck Duck Goose',
@@ -619,6 +689,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'non-competitive', 'small-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment'],
   },
   {
     name: 'Simon Says',
@@ -628,6 +699,7 @@ export const GAMES_LIBRARY = [
     energy: 'low',
     competition: 'none',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'low-energy', 'non-competitive', 'flexible-size', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment'],
   },
   {
     name: 'Red Light Green Light',
@@ -638,6 +710,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'competitive', 'flexible-size', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment'],
   },
   {
     name: 'Mother May I',
@@ -647,6 +720,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'competitive', 'small-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Sardines',
@@ -657,6 +731,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'none',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'non-competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Ghost in the Graveyard',
@@ -666,6 +741,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'medium',
     location: 'outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'medium-group', 'social', 'hands-on', 'outdoor', 'weather-dependent', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Follow the Leader',
@@ -675,6 +751,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'none',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'non-competitive', 'flexible-size', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment'],
   },
   {
     name: 'Sharks and Minnows',
@@ -684,6 +761,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'team',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'gym-required', 'minimal-equipment', 'loud'],
   },
   {
     name: 'British Bulldog',
@@ -693,6 +771,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'team',
     location: 'outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'large-group', 'social', 'hands-on', 'outdoor', 'weather-dependent', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Stuck in the Mud',
@@ -702,6 +781,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'cooperative', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Cops and Robbers',
@@ -711,6 +791,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'team',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'large-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Zombie Tag',
@@ -720,6 +801,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'medium',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
 
   // Cooperative & Low Competition
@@ -731,6 +813,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'none',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'cooperative', 'large-group', 'social', 'hands-on', 'indoor', 'outdoor', 'equipment-heavy', 'loud'],
   },
   {
     name: 'Charades',
@@ -740,6 +823,7 @@ export const GAMES_LIBRARY = [
     energy: 'low',
     competition: 'team',
     location: 'indoor',
+    tags: ['games', 'low-energy', 'competitive', 'flexible-size', 'social', 'creative', 'hands-on', 'indoor', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Telephone',
@@ -749,6 +833,7 @@ export const GAMES_LIBRARY = [
     energy: 'low',
     competition: 'none',
     location: 'indoor',
+    tags: ['games', 'low-energy', 'non-competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'minimal-equipment', 'quiet'],
   },
 
   // Active Races
@@ -760,6 +845,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'team',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'small-group', 'social', 'hands-on', 'indoor', 'outdoor', 'gym-required', 'minimal-equipment', 'loud'],
   },
   {
     name: 'Invisible Obstacle Course',
@@ -770,6 +856,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'none',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'non-competitive', 'flexible-size', 'creative', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment'],
   },
 
   // Mind Games
@@ -782,6 +869,7 @@ export const GAMES_LIBRARY = [
     energy: 'low',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'low-energy', 'competitive', 'small-group', 'social', 'hands-on', 'indoor', 'outdoor', 'traditional', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Rock in the Fist',
@@ -791,6 +879,7 @@ export const GAMES_LIBRARY = [
     energy: 'low',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'low-energy', 'competitive', 'small-group', 'social', 'hands-on', 'indoor', 'outdoor', 'traditional', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Green Glass Door',
@@ -800,6 +889,7 @@ export const GAMES_LIBRARY = [
     energy: 'low',
     competition: 'none',
     location: 'indoor',
+    tags: ['games', 'low-energy', 'non-competitive', 'flexible-size', 'social', 'indoor', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Black Magic',
@@ -809,6 +899,7 @@ export const GAMES_LIBRARY = [
     energy: 'low',
     competition: 'none',
     location: 'indoor',
+    tags: ['games', 'low-energy', 'non-competitive', 'small-group', 'social', 'indoor', 'minimal-equipment', 'quiet'],
   },
 
   // Traditional
@@ -820,6 +911,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'low',
     location: 'outdoor',
+    tags: ['games', 'physical', 'moderate', 'competitive', 'small-group', 'hands-on', 'outdoor', 'weather-dependent', 'minimal-equipment'],
   },
   {
     name: 'Toe Toss',
@@ -830,6 +922,7 @@ export const GAMES_LIBRARY = [
     energy: 'low',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'low-energy', 'competitive', 'small-group', 'hands-on', 'indoor', 'outdoor', 'traditional', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Make the Stick Jump',
@@ -840,6 +933,7 @@ export const GAMES_LIBRARY = [
     energy: 'medium',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'moderate', 'competitive', 'small-group', 'hands-on', 'indoor', 'outdoor', 'traditional', 'minimal-equipment'],
   },
   {
     name: 'Ring Games',
@@ -849,6 +943,7 @@ export const GAMES_LIBRARY = [
     energy: 'low',
     competition: 'none',
     location: 'indoor/outdoor',
+    tags: ['games', 'low-energy', 'non-competitive', 'medium-group', 'social', 'hands-on', 'indoor', 'outdoor', 'traditional', 'minimal-equipment', 'quiet'],
   },
   {
     name: 'Jump!',
@@ -858,6 +953,7 @@ export const GAMES_LIBRARY = [
     energy: 'high',
     competition: 'low',
     location: 'indoor/outdoor',
+    tags: ['games', 'physical', 'high-energy', 'competitive', 'flexible-size', 'hands-on', 'indoor', 'outdoor', 'minimal-equipment', 'loud'],
   },
 ];
 
@@ -926,4 +1022,155 @@ export function searchActivities(query, type = 'all') {
   }
 
   return results;
+}
+
+/**
+ * Get activities by tag
+ * @param {string|Array<string>} tags - Single tag or array of tags to match
+ * @param {string} matchType - 'any' (default) or 'all' - whether to match any tag or all tags
+ * @returns {Array} Activities matching the tag(s)
+ */
+export function getActivitiesByTags(tags, matchType = 'any') {
+  const tagArray = Array.isArray(tags) ? tags : [tags];
+  const allActivities = [...FITNESS_ACTIVITIES, ...COOKING_ACTIVITIES, ...GAMES_LIBRARY];
+
+  return allActivities.filter((activity) => {
+    if (!activity.tags) return false;
+
+    if (matchType === 'all') {
+      return tagArray.every((tag) => activity.tags.includes(tag));
+    } else {
+      return tagArray.some((tag) => activity.tags.includes(tag));
+    }
+  });
+}
+
+/**
+ * Get recommended activities for a group of students
+ * @param {Array<Object>} students - Array of student objects with interests
+ * @returns {Array} Recommended activities sorted by match score
+ */
+export function getRecommendedActivities(students) {
+  if (!students || students.length === 0) return [];
+
+  // Collect all tags from student interests
+  const studentTags = [];
+  const dislikedTags = [];
+
+  students.forEach((student) => {
+    // Add tags from likes and favorite activities
+    if (student.likes) {
+      student.likes.forEach((like) => {
+        // Extract tags from student interests (simple keyword matching)
+        const tags = extractTagsFromInterest(like);
+        studentTags.push(...tags);
+      });
+    }
+
+    if (student.favoriteActivities) {
+      student.favoriteActivities.forEach((activity) => {
+        const tags = extractTagsFromInterest(activity);
+        studentTags.push(...tags);
+      });
+    }
+
+    // Collect disliked tags
+    if (student.dislikes) {
+      student.dislikes.forEach((dislike) => {
+        const tags = extractTagsFromInterest(dislike);
+        dislikedTags.push(...tags);
+      });
+    }
+  });
+
+  // Count tag frequency
+  const tagCounts = {};
+  studentTags.forEach((tag) => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  });
+
+  // Get all activities
+  const allActivities = [...FITNESS_ACTIVITIES, ...COOKING_ACTIVITIES, ...GAMES_LIBRARY];
+
+  // Score each activity
+  const scoredActivities = allActivities.map((activity) => {
+    let score = 0;
+
+    if (activity.tags) {
+      // Add points for matching tags
+      activity.tags.forEach((tag) => {
+        if (tagCounts[tag]) {
+          score += tagCounts[tag];
+        }
+      });
+
+      // Subtract points for disliked tags
+      activity.tags.forEach((tag) => {
+        if (dislikedTags.includes(tag)) {
+          score -= 10; // Heavy penalty for dislikes
+        }
+      });
+    }
+
+    return { ...activity, matchScore: score };
+  });
+
+  // Sort by score and return top matches
+  return scoredActivities
+    .filter((activity) => activity.matchScore > 0)
+    .sort((a, b) => b.matchScore - a.matchScore);
+}
+
+/**
+ * Extract tags from student interest keywords
+ * @param {string} interest - Student interest text
+ * @returns {Array<string>} Matching tags
+ */
+function extractTagsFromInterest(interest) {
+  const lower = interest.toLowerCase();
+  const tags = [];
+
+  // Mapping of keywords to tags
+  const keywordMap = {
+    basketball: ['physical', 'high-energy', 'sports', 'competitive'],
+    hockey: ['physical', 'high-energy', 'sports', 'competitive'],
+    soccer: ['physical', 'high-energy', 'sports', 'competitive'],
+    running: ['physical', 'high-energy'],
+    sports: ['physical', 'high-energy', 'sports'],
+    tag: ['games', 'physical', 'high-energy'],
+    games: ['games', 'social'],
+    'video games': ['video-games', 'social'],
+    gaming: ['video-games', 'social'],
+    cooking: ['cooking', 'hands-on', 'creative'],
+    baking: ['cooking', 'hands-on', 'creative'],
+    food: ['cooking'],
+    art: ['arts-crafts', 'creative', 'hands-on'],
+    drawing: ['arts-crafts', 'creative', 'hands-on'],
+    painting: ['arts-crafts', 'creative', 'hands-on'],
+    crafts: ['arts-crafts', 'creative', 'hands-on'],
+    music: ['music', 'creative'],
+    singing: ['music', 'creative'],
+    dancing: ['music', 'physical', 'high-energy'],
+    drumming: ['music', 'cultural', 'drumming'],
+    quiet: ['low-energy', 'quiet'],
+    calm: ['low-energy', 'quiet'],
+    reading: ['low-energy', 'quiet'],
+    outdoor: ['outdoor', 'physical'],
+    nature: ['outdoor', 'land-based'],
+    sledding: ['winter-outdoor', 'physical', 'high-energy'],
+    skating: ['winter-outdoor', 'physical', 'sports'],
+    competition: ['competitive'],
+    team: ['cooperative'],
+    together: ['social', 'cooperative'],
+  };
+
+  // Check for keyword matches
+  Object.keys(keywordMap).forEach((keyword) => {
+    if (lower.includes(keyword)) {
+      tags.push(...keywordMap[keyword]);
+    }
+  });
+
+  // Remove duplicates
+  return [...new Set(tags)];
 }

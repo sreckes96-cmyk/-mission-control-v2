@@ -512,6 +512,13 @@ export class StudentProfileModal extends Component {
 
   onMount() {
     logger.info(`Opened profile for ${this.state.student?.name}`);
+    // Lock body scroll
+    document.body.classList.add('modal-open');
+  }
+
+  onUnmount() {
+    // Unlock body scroll
+    document.body.classList.remove('modal-open');
   }
 }
 

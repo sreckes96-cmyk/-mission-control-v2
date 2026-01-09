@@ -7,6 +7,7 @@ import { Component } from '../../core/Component.js';
 import { scheduleRepository } from '../../data/ScheduleRepository.js';
 import { studentRepository } from '../../data/StudentRepository.js';
 import { getAllCategories, getCategoryColor } from '../../data/activityCategories.js';
+import { getRecommendedActivities } from '../../data/activities.js';
 import { logger } from '../../utils/logger.js';
 import { debounce } from '../../utils/helpers.js';
 
@@ -244,8 +245,53 @@ export class InteractiveCalendar extends Component {
     `;
   }
 
+  renderRecommendedActivities(recommendations, studentCount) {
+    if (recommendations.length === 0) {
+      return `
+        <div class="recommendations-hint">
+          💡 <strong>Tip:</strong> Select students below to see activity recommendations based on their interests!
+        </div>
+      `;
+    }
+
+    // Show top 6 recommendations
+    const topRecommendations = recommendations.slice(0, 6);
+
+    return `
+      <div class="form-group recommendations-section">
+        <label class="form-label">
+          ✨ Recommended for ${studentCount} ${studentCount === 1 ? 'student' : 'students'}
+        </label>
+        <div class="recommendations-grid">
+          ${topRecommendations.map(activity => `
+            <button
+              class="recommendation-card"
+              data-activity-name="${activity.name}"
+              title="${activity.description || ''}">
+              <div class="recommendation-name">${activity.name}</div>
+              <div class="recommendation-match">
+                <span class="match-score">Match: ${activity.matchScore}</span>
+                ${activity.tags ? `<span class="activity-tags">${activity.tags.slice(0, 3).join(', ')}</span>` : ''}
+              </div>
+            </button>
+          `).join('')}
+        </div>
+        <div class="recommendations-note">
+          💚 Activities matched based on student interests, energy levels, and group compatibility
+        </div>
+      </div>
+    `;
+  }
+
   renderActivityPickerModal(slot) {
     const categories = getAllCategories();
+    const { selectedStudents, allStudents} = this.state;
+
+    // Get recommended activities if students are selected
+    const students = selectedStudents
+      .map(id => allStudents.find(s => s.id === id))
+      .filter(s => s);
+    const recommendations = students.length > 0 ? getRecommendedActivities(students) : [];
 
     return `
       <div class="modal-overlay" id="activity-picker-modal">
@@ -259,6 +305,8 @@ export class InteractiveCalendar extends Component {
             <div class="picker-time-info">
               <strong>Time:</strong> ${slot ? slot.start : 'Select a time slot'}
             </div>
+
+            ${this.renderRecommendedActivities(recommendations, students.length)}
 
             <div class="form-group">
               <label class="form-label">Activity Type</label>
@@ -466,6 +514,8 @@ export class InteractiveCalendar extends Component {
       selectedSlot: slot,
       selectedStudents: [], // Reset student selection
     });
+    // Lock body scroll
+    document.body.classList.add('modal-open');
     // Populate students after render
     setTimeout(() => {
       this.populateStudentSelector();
@@ -480,6 +530,8 @@ export class InteractiveCalendar extends Component {
       selectedStudents: [],
       studentSearch: '',
     });
+    // Unlock body scroll
+    document.body.classList.remove('modal-open');
   }
 
   setupStudentSearch() {
@@ -627,6 +679,54 @@ export class InteractiveCalendar extends Component {
       .join('');
   }
 
+  updateRecommendations() {
+    const { selectedStudents, allStudents } = this.state;
+    const students = selectedStudents
+      .map(id => allStudents.find(s => s.id === id))
+      .filter(s => s);
+    const recommendations = students.length > 0 ? getRecommendedActivities(students) : [];
+
+    // Update recommendations section
+    const recommendationsSection = this.$('.recommendations-section');
+    const recommendationsHint = this.$('.recommendations-hint');
+
+    if (recommendations.length > 0 && (recommendationsHint || recommendationsSection)) {
+      const parent = recommendationsHint ? recommendationsHint.parentElement : recommendationsSection.parentElement;
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = this.renderRecommendedActivities(recommendations, students.length);
+      const newContent = tempDiv.firstElementChild;
+
+      if (recommendationsHint) {
+        recommendationsHint.replaceWith(newContent);
+      } else if (recommendationsSection) {
+        recommendationsSection.replaceWith(newContent);
+      }
+
+      this.attachRecommendationHandlers();
+    } else if (recommendations.length === 0 && recommendationsSection) {
+      // Show hint when no recommendations
+      recommendationsSection.outerHTML = `
+        <div class="recommendations-hint">
+          💡 <strong>Tip:</strong> Select students below to see activity recommendations based on their interests!
+        </div>
+      `;
+    }
+  }
+
+  attachRecommendationHandlers() {
+    const recommendationCards = this.$$('.recommendation-card');
+    recommendationCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const activityName = card.dataset.activityName;
+        const titleInput = this.$('#activity-title');
+        if (titleInput) {
+          titleInput.value = activityName;
+          titleInput.focus();
+        }
+      });
+    });
+  }
+
   populateStudentSelector() {
     const selectorContainer = this.$('#student-selector');
     const selectedDisplay = this.$('#selected-students-display');
@@ -646,6 +746,8 @@ export class InteractiveCalendar extends Component {
           this.toggleStudentSelection(studentId);
           // Re-render both selector and chips
           this.populateStudentSelector();
+          // Update recommendations
+          this.updateRecommendations();
         });
       });
     }
@@ -661,6 +763,8 @@ export class InteractiveCalendar extends Component {
           const studentId = parseInt(btn.dataset.studentId);
           this.toggleStudentSelection(studentId);
           this.populateStudentSelector();
+          // Update recommendations
+          this.updateRecommendations();
         });
       });
     }
@@ -1005,6 +1109,88 @@ export function addInteractiveCalendarStyles() {
       border-radius: 4px;
       margin-bottom: 1.5rem;
       font-size: 0.9rem;
+    }
+
+    /* Recommendations Section */
+    .recommendations-hint {
+      padding: 1rem;
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px dashed rgba(96, 165, 250, 0.3);
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--gray-soft);
+      text-align: center;
+    }
+
+    .recommendations-section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(96, 165, 250, 0.1));
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      border-radius: 12px;
+    }
+
+    .recommendations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .recommendation-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+
+    .recommendation-card:hover {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: rgba(16, 185, 129, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .recommendation-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .recommendation-match {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .match-score {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6ee7b7;
+      background: rgba(16, 185, 129, 0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      align-self: flex-start;
+    }
+
+    .activity-tags {
+      font-size: 0.7rem;
+      color: var(--gray-soft);
+      font-style: italic;
+    }
+
+    .recommendations-note {
+      font-size: 0.8rem;
+      color: var(--gray-soft);
+      text-align: center;
+      margin-top: 0.5rem;
     }
 
     .category-grid {
