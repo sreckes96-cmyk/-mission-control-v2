@@ -8,7 +8,7 @@ import { studentRepository } from '../../data/StudentRepository.js';
 import { logger } from '../../utils/logger.js';
 import { sanitize } from '../../utils/validators.js';
 
-// Skating Progression Levels (Based on user's JSON structure)
+// Skating Progression Levels
 const SKATING_LEVELS = [
   {
     id: 'pre-level',
@@ -283,14 +283,26 @@ const HOCKEY_SKILLS = [
   },
 ];
 
+// Grade groups for filtering
+const GRADE_GROUPS = [
+  { id: 'all', label: 'All Students', grades: [] },
+  { id: 'kindergarten', label: 'Kindergarten', grades: [0] },
+  { id: 'grade-1-2', label: 'Grade 1-2', grades: [1, 2] },
+  { id: 'grade-3-4', label: 'Grade 3-4', grades: [3, 4] },
+  { id: 'grade-5-6', label: 'Grade 5-6', grades: [5, 6] },
+  { id: 'grade-7-8', label: 'Grade 7-8', grades: [7, 8] },
+];
+
 export class Arena extends Component {
   constructor(container, props = {}) {
     super(container, props);
 
     this.state = {
-      students: [],
+      allStudents: [],
+      filteredStudents: [],
+      selectedGradeGroup: 'all',
       selectedStudent: null,
-      view: 'overview', // 'overview' | 'student-detail'
+      view: 'grid', // 'grid' | 'detail'
       activeTab: 'overview', // 'overview' | 'skating' | 'hockey'
     };
   }
@@ -351,6 +363,31 @@ export class Arena extends Component {
     return Math.round((levelWeight + levelIncrement) * 100);
   }
 
+  /**
+   * Filter students by grade group
+   */
+  filterByGradeGroup(gradeGroupId) {
+    const gradeGroup = GRADE_GROUPS.find(g => g.id === gradeGroupId);
+    if (!gradeGroup) return;
+
+    if (gradeGroupId === 'all') {
+      this.setState({
+        filteredStudents: this.state.allStudents,
+        selectedGradeGroup: gradeGroupId,
+      });
+    } else {
+      const filtered = this.state.allStudents.filter(student =>
+        gradeGroup.grades.includes(student.grade)
+      );
+      this.setState({
+        filteredStudents: filtered,
+        selectedGradeGroup: gradeGroupId,
+      });
+    }
+
+    logger.info(`Filtered to ${gradeGroup.label}: ${this.state.filteredStudents.length} students`);
+  }
+
   template() {
     const { view } = this.state;
 
@@ -358,93 +395,88 @@ export class Arena extends Component {
       <div class="arena-container">
         <div class="arena-header">
           <h2 class="section-title">⛸️ Arena - Hockey & Skating Progress</h2>
-          <p class="section-subtitle">Gamified skill progression tracker for each student</p>
+          <p class="section-subtitle">Track individual student progression through skating levels and hockey skills</p>
         </div>
 
-        ${view === 'overview' ? this.renderStudentGrid() : this.renderStudentDetail()}
+        ${view === 'grid' ? this.renderGridView() : this.renderDetailView()}
       </div>
     `;
   }
 
   /**
-   * Render student grid overview
+   * Render grid view with filters
    */
-  renderStudentGrid() {
-    const { students } = this.state;
+  renderGridView() {
+    const { filteredStudents, selectedGradeGroup } = this.state;
 
     return `
-      <div class="student-progress-grid">
-        ${students.length > 0
-          ? students.map(student => this.renderStudentProgressCard(student)).join('')
-          : this.renderEmptyState()}
+      <div class="arena-grid-view">
+        <!-- Grade Group Filters -->
+        <div class="grade-filters">
+          <h3 class="filter-title">Filter by Grade</h3>
+          <div class="grade-filter-buttons">
+            ${GRADE_GROUPS.map(group => `
+              <button
+                class="grade-filter-btn ${selectedGradeGroup === group.id ? 'active' : ''}"
+                data-grade-group="${group.id}">
+                ${group.label}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Student Grid -->
+        <div class="student-grid-container">
+          <div class="student-grid-header">
+            <h3>Students (${filteredStudents.length})</h3>
+            <p class="grid-subtitle">Click on a student to view detailed progress</p>
+          </div>
+
+          ${filteredStudents.length > 0 ? `
+            <div class="student-compact-grid">
+              ${filteredStudents.map(student => this.renderCompactStudentCard(student)).join('')}
+            </div>
+          ` : `
+            <div class="empty-state">
+              <div class="empty-state-icon">⛸️</div>
+              <h3>No students in this grade group</h3>
+              <p>Select a different grade filter or add students to the system</p>
+            </div>
+          `}
+        </div>
       </div>
     `;
   }
 
   /**
-   * Render individual student progress card
+   * Render compact student card (first name + progress)
    */
-  renderStudentProgressCard(student) {
+  renderCompactStudentCard(student) {
     const currentLevel = this.getCurrentLevel(student);
     const overallProgress = this.calculateOverallProgress(student);
-    const progress = student.hockeyProgress || {};
+    const firstName = student.name.split(' ')[0];
 
     return `
-      <div class="student-progress-card" data-student-id="${student.id}">
-        <div class="progress-card-header">
-          <div class="student-avatar-sm">
-            ${student.name.split(' ').map(n => n[0]).join('')}
-          </div>
-          <div class="progress-card-info">
-            <h3 class="student-name-sm">${sanitize(student.name)}</h3>
-            <div class="current-level-badge" style="background: ${currentLevel.color};">
-              ${currentLevel.badge} ${currentLevel.level}
-            </div>
-          </div>
+      <div class="student-compact-card" data-student-id="${student.id}">
+        <div class="compact-card-badge" style="background: ${currentLevel.color};">
+          ${currentLevel.badge}
         </div>
-
-        <div class="progress-stats">
-          <div class="stat-box">
-            <div class="stat-label">Overall Progress</div>
-            <div class="stat-value">${overallProgress}%</div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: ${overallProgress}%; background: ${currentLevel.color};"></div>
-            </div>
+        <div class="compact-card-content">
+          <h4 class="compact-student-name">${sanitize(firstName)}</h4>
+          <div class="compact-level-name">${currentLevel.level}</div>
+          <div class="compact-progress-bar">
+            <div class="compact-progress-fill" style="width: ${overallProgress}%; background: ${currentLevel.color};"></div>
           </div>
-
-          <div class="stat-row">
-            <div class="stat-mini">
-              <span class="stat-mini-icon">⛸️</span>
-              <span class="stat-mini-value">${progress.completedDrills?.length || 0} drills</span>
-            </div>
-            <div class="stat-mini">
-              <span class="stat-mini-icon">🏒</span>
-              <span class="stat-mini-value">${progress.masteredSkills?.length || 0} skills</span>
-            </div>
-          </div>
+          <div class="compact-progress-text">${overallProgress}% Complete</div>
         </div>
-
-        <button class="btn btn-primary btn-small view-student-btn" data-student-id="${student.id}">
-          View Progress →
-        </button>
-      </div>
-    `;
-  }
-
-  renderEmptyState() {
-    return `
-      <div class="empty-state">
-        <div class="empty-state-icon">⛸️</div>
-        <h3>No students found</h3>
-        <p>Add students to start tracking their hockey progress</p>
       </div>
     `;
   }
 
   /**
-   * Render detailed student view
+   * Render detail view
    */
-  renderStudentDetail() {
+  renderDetailView() {
     const { selectedStudent, activeTab } = this.state;
     if (!selectedStudent) return '';
 
@@ -454,7 +486,7 @@ export class Arena extends Component {
       <div class="student-detail-view">
         <div class="detail-header">
           <button class="btn btn-secondary btn-small" id="back-to-grid">
-            ← Back to All Students
+            ← Back to Grid
           </button>
           <div class="detail-student-info">
             <div class="student-avatar-lg">
@@ -525,7 +557,7 @@ export class Arena extends Component {
             <div class="overview-stat-content">
               <div class="overview-stat-label">Completed Drills</div>
               <div class="overview-stat-value">${progress.completedDrills?.length || 0}</div>
-              <div class="overview-stat-sub">Total mastered</div>
+              <div class="overview-stat-sub">Skating drills</div>
             </div>
           </div>
 
@@ -584,7 +616,7 @@ export class Arena extends Component {
   }
 
   /**
-   * Render skating tab
+   * Render skating tab with level selection
    */
   renderSkatingTab(student) {
     const currentLevel = this.getCurrentLevel(student);
@@ -753,11 +785,20 @@ export class Arena extends Component {
   }
 
   attachEvents() {
-    // View student buttons
-    const viewBtns = this.$$('.view-student-btn');
-    viewBtns.forEach(btn => {
+    // Grade filter buttons
+    const filterBtns = this.$$('.grade-filter-btn');
+    filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        const studentId = parseInt(btn.dataset.studentId);
+        const gradeGroup = btn.dataset.gradeGroup;
+        this.filterByGradeGroup(gradeGroup);
+      });
+    });
+
+    // Compact student cards - click to view detail
+    const studentCards = this.$$('.student-compact-card');
+    studentCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const studentId = parseInt(card.dataset.studentId);
         this.viewStudent(studentId);
       });
     });
@@ -766,7 +807,7 @@ export class Arena extends Component {
     const backBtn = this.$('#back-to-grid');
     if (backBtn) {
       backBtn.addEventListener('click', () => {
-        this.setState({ view: 'overview', selectedStudent: null });
+        this.setState({ view: 'grid', selectedStudent: null });
       });
     }
 
@@ -822,12 +863,12 @@ export class Arena extends Component {
    * View student details
    */
   viewStudent(studentId) {
-    const student = this.state.students.find(s => s.id === studentId);
+    const student = this.state.allStudents.find(s => s.id === studentId);
     if (student) {
       this.initializeStudentProgress(student);
       this.setState({
         selectedStudent: student,
-        view: 'student-detail',
+        view: 'detail',
         activeTab: 'overview',
       });
       logger.info(`Viewing progress for: ${student.name}`);
@@ -903,6 +944,13 @@ export class Arena extends Component {
     selectedStudent.hockeyProgress = progress;
     studentRepository.update(selectedStudent.id, selectedStudent);
 
+    // Update the student in state
+    const updatedStudents = this.state.allStudents.map(s =>
+      s.id === selectedStudent.id ? selectedStudent : s
+    );
+    this.state.allStudents = updatedStudents;
+    this.filterByGradeGroup(this.state.selectedGradeGroup);
+
     // Re-render
     this.render();
   }
@@ -934,6 +982,13 @@ export class Arena extends Component {
     progress.lastUpdated = new Date().toISOString();
     selectedStudent.hockeyProgress = progress;
     studentRepository.update(selectedStudent.id, selectedStudent);
+
+    // Update the student in state
+    const updatedStudents = this.state.allStudents.map(s =>
+      s.id === selectedStudent.id ? selectedStudent : s
+    );
+    this.state.allStudents = updatedStudents;
+    this.filterByGradeGroup(this.state.selectedGradeGroup);
 
     // Re-render
     this.render();
@@ -971,6 +1026,13 @@ export class Arena extends Component {
     selectedStudent.hockeyProgress = progress;
     studentRepository.update(selectedStudent.id, selectedStudent);
 
+    // Update the student in state
+    const updatedStudents = this.state.allStudents.map(s =>
+      s.id === selectedStudent.id ? selectedStudent : s
+    );
+    this.state.allStudents = updatedStudents;
+    this.filterByGradeGroup(this.state.selectedGradeGroup);
+
     logger.success(`🎉 Advanced to ${nextLevel.level}!`);
     this.render();
   }
@@ -981,7 +1043,12 @@ export class Arena extends Component {
   loadStudents() {
     const students = studentRepository.getAllSorted();
     students.forEach(s => this.initializeStudentProgress(s));
-    this.setState({ students });
+
+    this.setState({
+      allStudents: students,
+      filteredStudents: students,
+    });
+
     logger.info(`Loaded ${students.length} students for Arena`);
   }
 
@@ -1009,124 +1076,175 @@ export function addArenaStyles() {
       margin-top: 0.5rem;
     }
 
-    /* Student Grid */
-    .student-progress-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .student-progress-card {
+    /* Grade Filters */
+    .grade-filters {
+      margin-bottom: 2rem;
       background: rgba(255, 255, 255, 0.05);
-      border: 2px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: 1.5rem;
+    }
+
+    .filter-title {
+      margin: 0 0 1rem 0;
+      font-size: 1rem;
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    .grade-filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .grade-filter-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: var(--cream);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
       transition: all 0.2s;
     }
 
-    .student-progress-card:hover {
-      background: rgba(255, 255, 255, 0.08);
+    .grade-filter-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 167, 38, 0.2);
     }
 
-    .progress-card-header {
-      display: flex;
-      align-items: center;
+    .grade-filter-btn.active {
+      background: var(--amber-warm);
+      border-color: var(--amber-warm);
+      color: var(--navy-deep);
+      font-weight: 600;
+    }
+
+    /* Student Grid */
+    .student-grid-container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .student-grid-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .student-grid-header h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--cream);
+      font-size: 1.25rem;
+    }
+
+    .grid-subtitle {
+      margin: 0;
+      color: var(--gray-soft);
+      font-size: 0.9rem;
+    }
+
+    .student-compact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1rem;
-      margin-bottom: 1rem;
     }
 
-    .student-avatar-sm {
-      width: 50px;
-      height: 50px;
+    .student-compact-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .student-compact-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(255, 167, 38, 0.3);
+    }
+
+    .compact-card-badge {
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--amber-warm), var(--color-academics));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 1rem;
       color: white;
-      flex-shrink: 0;
     }
 
-    .progress-card-info {
-      flex: 1;
+    .compact-card-content {
+      width: 100%;
     }
 
-    .student-name-sm {
+    .compact-student-name {
       margin: 0 0 0.5rem 0;
       font-size: 1.1rem;
+      font-weight: 600;
       color: var(--cream);
-      font-weight: 600;
     }
 
-    .current-level-badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 6px;
+    .compact-level-name {
       font-size: 0.8rem;
-      font-weight: 600;
-      color: white;
-    }
-
-    .progress-stats {
-      margin-bottom: 1rem;
-    }
-
-    .stat-box {
-      margin-bottom: 1rem;
-    }
-
-    .stat-label {
-      font-size: 0.85rem;
       color: var(--gray-soft);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
 
-    .stat-value {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--amber-warm);
-      margin-bottom: 0.5rem;
-    }
-
-    .progress-bar {
-      height: 8px;
+    .compact-progress-bar {
+      height: 6px;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
+      border-radius: 3px;
       overflow: hidden;
+      margin-bottom: 0.5rem;
     }
 
-    .progress-fill {
+    .compact-progress-fill {
       height: 100%;
       transition: width 0.3s ease;
-      border-radius: 4px;
+      border-radius: 3px;
     }
 
-    .stat-row {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .stat-mini {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.5rem;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .compact-progress-text {
       font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--amber-warm);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
       color: var(--cream);
+      margin-bottom: 0.5rem;
     }
 
-    .stat-mini-icon {
-      font-size: 1.2rem;
+    .empty-state p {
+      color: var(--gray-soft);
     }
 
-    /* Student Detail View */
+    /* Detail View Styles */
     .student-detail-view {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1704,7 +1822,7 @@ export function addArenaStyles() {
 
     /* Responsive */
     @media (max-width: 768px) {
-      .student-progress-grid,
+      .student-compact-grid,
       .drill-cards-grid,
       .hockey-drill-list {
         grid-template-columns: 1fr;
@@ -1720,6 +1838,14 @@ export function addArenaStyles() {
 
       .level-buttons {
         grid-template-columns: 1fr;
+      }
+
+      .grade-filter-buttons {
+        flex-direction: column;
+      }
+
+      .grade-filter-btn {
+        width: 100%;
       }
     }
   `;
