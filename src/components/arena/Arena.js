@@ -1045,43 +1045,34 @@ export class Arena extends Component {
   }
 
   /**
-   * Load students on mount
+   * Load students from repository (matches StudentList approach)
    */
   loadStudents() {
-    // Try to get from store first, fallback to repository
-    let students = [];
+    try {
+      const students = studentRepository.getAllSorted();
 
-    if (this.props.store) {
-      students = this.props.store.get('students') || [];
-      logger.info(`Loaded ${students.length} students from store`);
+      logger.info(`Arena: Loaded ${students.length} students from repository`);
+
+      if (students.length === 0) {
+        logger.warn('Arena: No students found in repository');
+      } else {
+        logger.info(`Arena: Initializing hockey progress for ${students.length} students`);
+      }
+
+      students.forEach(s => this.initializeStudentProgress(s));
+
+      this.setState({ allStudents: students });
+      this.filterStudents(); // Apply filter after loading
+
+      logger.info(`Arena: After filtering, showing ${this.state.filteredStudents.length} students`);
+    } catch (error) {
+      logger.error('Arena: Failed to load students', error);
     }
-
-    if (students.length === 0) {
-      students = studentRepository.getAllSorted();
-      logger.info(`Loaded ${students.length} students from repository`);
-    }
-
-    if (students.length === 0) {
-      logger.warn('No students found in store or repository');
-    }
-
-    students.forEach(s => this.initializeStudentProgress(s));
-
-    this.setState({ allStudents: students });
-    this.filterStudents(); // Apply filter after loading
   }
 
   onMount() {
+    logger.info('Arena component mounting...');
     this.loadStudents();
-
-    // Subscribe to student updates from store
-    if (this.props.store) {
-      this.props.store.subscribe('students', () => {
-        logger.info('Students updated in store, reloading Arena');
-        this.loadStudents();
-      });
-    }
-
     logger.info('Arena component mounted');
   }
 }
