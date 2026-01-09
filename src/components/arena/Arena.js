@@ -367,25 +367,32 @@ export class Arena extends Component {
    * Filter students by grade group
    */
   filterByGradeGroup(gradeGroupId) {
-    const gradeGroup = GRADE_GROUPS.find(g => g.id === gradeGroupId);
-    if (!gradeGroup) return;
+    this.setState({ selectedGradeGroup: gradeGroupId });
+    this.filterStudents();
+  }
 
-    if (gradeGroupId === 'all') {
-      this.setState({
-        filteredStudents: this.state.allStudents,
-        selectedGradeGroup: gradeGroupId,
-      });
-    } else {
-      const filtered = this.state.allStudents.filter(student =>
-        gradeGroup.grades.includes(student.grade)
-      );
-      this.setState({
-        filteredStudents: filtered,
-        selectedGradeGroup: gradeGroupId,
-      });
+  /**
+   * Apply filters to student list
+   */
+  filterStudents() {
+    const { allStudents, selectedGradeGroup } = this.state;
+    const gradeGroup = GRADE_GROUPS.find(g => g.id === selectedGradeGroup);
+
+    if (!gradeGroup) {
+      this.setState({ filteredStudents: allStudents });
+      return;
     }
 
-    logger.info(`Filtered to ${gradeGroup.label}: ${this.state.filteredStudents.length} students`);
+    if (selectedGradeGroup === 'all') {
+      this.setState({ filteredStudents: allStudents });
+      logger.info(`Showing all students: ${allStudents.length}`);
+    } else {
+      const filtered = allStudents.filter(student =>
+        gradeGroup.grades.includes(student.grade)
+      );
+      this.setState({ filteredStudents: filtered });
+      logger.info(`Filtered to ${gradeGroup.label}: ${filtered.length} students`);
+    }
   }
 
   template() {
@@ -948,8 +955,8 @@ export class Arena extends Component {
     const updatedStudents = this.state.allStudents.map(s =>
       s.id === selectedStudent.id ? selectedStudent : s
     );
-    this.state.allStudents = updatedStudents;
-    this.filterByGradeGroup(this.state.selectedGradeGroup);
+    this.setState({ allStudents: updatedStudents });
+    this.filterStudents();
 
     // Re-render
     this.render();
@@ -987,8 +994,8 @@ export class Arena extends Component {
     const updatedStudents = this.state.allStudents.map(s =>
       s.id === selectedStudent.id ? selectedStudent : s
     );
-    this.state.allStudents = updatedStudents;
-    this.filterByGradeGroup(this.state.selectedGradeGroup);
+    this.setState({ allStudents: updatedStudents });
+    this.filterStudents();
 
     // Re-render
     this.render();
@@ -1030,8 +1037,8 @@ export class Arena extends Component {
     const updatedStudents = this.state.allStudents.map(s =>
       s.id === selectedStudent.id ? selectedStudent : s
     );
-    this.state.allStudents = updatedStudents;
-    this.filterByGradeGroup(this.state.selectedGradeGroup);
+    this.setState({ allStudents: updatedStudents });
+    this.filterStudents();
 
     logger.success(`🎉 Advanced to ${nextLevel.level}!`);
     this.render();
@@ -1044,10 +1051,8 @@ export class Arena extends Component {
     const students = studentRepository.getAllSorted();
     students.forEach(s => this.initializeStudentProgress(s));
 
-    this.setState({
-      allStudents: students,
-      filteredStudents: students,
-    });
+    this.setState({ allStudents: students });
+    this.filterStudents(); // Apply filter after loading
 
     logger.info(`Loaded ${students.length} students for Arena`);
   }
