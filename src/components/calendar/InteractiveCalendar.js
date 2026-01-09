@@ -1100,6 +1100,12 @@ export function addInteractiveCalendarStyles() {
     .activity-picker-modal {
       width: 90%;
       max-width: 600px;
+      max-height: 90vh;
+    }
+
+    .activity-picker-modal .modal-body {
+      max-height: calc(90vh - 200px);
+      overflow-y: auto;
     }
 
     .picker-time-info {

@@ -633,7 +633,9 @@ export function addStudentProfileModalStyles() {
     .profile-content {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 2rem;
+      min-height: 0;
     }
 
     .profile-section {

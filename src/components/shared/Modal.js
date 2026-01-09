@@ -46,10 +46,12 @@ export function addModalStyles() {
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       max-width: 90vw;
       max-height: 90vh;
+      width: 100%;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       animation: slideUp 0.3s ease;
+      position: relative;
     }
 
     @keyframes slideUp {
@@ -103,7 +105,9 @@ export function addModalStyles() {
     .modal-body {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 2rem;
+      min-height: 0;
     }
 
     .modal-body::-webkit-scrollbar {
